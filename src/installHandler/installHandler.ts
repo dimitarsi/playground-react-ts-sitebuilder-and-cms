@@ -1,6 +1,7 @@
 import e, { RequestHandler } from "express";
 import multer from "multer";
 import fs from "fs";
+import ps from "child_process";
 
 const multerMiddleware = multer({ dest: "./uploads" });
 
@@ -12,9 +13,16 @@ export const installHandler: RequestHandler = (req, res) => {
   const pluginName = req.query["pluginName"]?.toString();
 
   if (req.file?.path && pluginName) {
-    const finalName = `${req.file.path}.js`;
+    const finalName = `${req.file.path}.zip`;
 
     fs.renameSync(req.file?.path, finalName);
+    console.log(`unzip ${finalName} -d ./uploads/${pluginName}/`);
+    ps.exec(
+      `unzip ${finalName} -d ./uploads/${pluginName}/ && mv ./uploads/${pluginName}/build/* ./uploads/${pluginName}/ && rmdir ./uploads/${pluginName}/build`,
+      (err) => {
+        console.log(err);
+      }
+    );
 
     pluginsConfig.plugins.push({
       pluginName,

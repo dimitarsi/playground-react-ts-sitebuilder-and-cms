@@ -16225,6 +16225,7 @@ __export(installHandler_exports, {
 module.exports = __toCommonJS(installHandler_exports);
 var import_multer = __toESM(require_multer());
 var import_fs = __toESM(require("fs"));
+var import_child_process = __toESM(require("child_process"));
 var multerMiddleware = (0, import_multer.default)({ dest: "./uploads" });
 var middleware = multerMiddleware.single("attachment");
 var installHandler = (req, res) => {
@@ -16234,8 +16235,12 @@ var installHandler = (req, res) => {
   const pluginsConfig = getPluginsConfig();
   const pluginName = (_a = req.query["pluginName"]) == null ? void 0 : _a.toString();
   if (((_b = req.file) == null ? void 0 : _b.path) && pluginName) {
-    const finalName = `${req.file.path}.js`;
+    const finalName = `${req.file.path}.zip`;
     import_fs.default.renameSync((_c = req.file) == null ? void 0 : _c.path, finalName);
+    console.log(`unzip ${finalName} -d ./uploads/${pluginName}/`);
+    import_child_process.default.exec(`unzip ${finalName} -d ./uploads/${pluginName}/ && mv ./uploads/${pluginName}/build/* ./uploads/${pluginName}/ && rmdir ./uploads/${pluginName}/build`, (err) => {
+      console.log(err);
+    });
     pluginsConfig.plugins.push({
       pluginName,
       path: finalName

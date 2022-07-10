@@ -36,9 +36,8 @@ var Component = () => {
     onClick: handleClick
   }, title);
 };
-var _a;
-if (typeof window !== "undefined") {
-  console.log("title", Component);
-  (_a = window.registerComponent) == null ? void 0 : _a.call(window, "title", Component);
-}
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  Component
+});
 //# sourceMappingURL=title.js.map

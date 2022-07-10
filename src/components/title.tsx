@@ -9,9 +9,3 @@ export const Component = () => {
 
   return <h1 onClick={handleClick}>{title}</h1>;
 };
-
-if (typeof window !== "undefined") {
-  console.log("title", Component);
-  // @ts-ignore
-  window.registerComponent?.("title", Component);
-}
