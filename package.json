@@ -1,0 +1,31 @@
+{
+  "name": "web-builder-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild ./src/*.ts ./src/*.tsx ./src/**/*.tsx ./src/**/*.ts --platform=node --outdir=./dist --format=cjs --sourcemap --source-root=./src --bundle",
+    "build:web": "esbuild ./src/client.tsx ./src/browser.ts --outdir=./dist --format=cjs --sourcemap --source-root=./src --bundle --minify",
+    "build:components": "esbuild ./src/components/*.tsx --outdir=./dist/browser --format=cjs --sourcemap --source-root=./src --bundle --external:react --external:react-dom",
+    "build:all": "yarn build && yarn build:web && yarn build:components",
+    "start": "node ./dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/multer": "^1.4.7",
+    "compression": "^1.7.4",
+    "express": "^4.18.1",
+    "multer": "^1.4.5-lts.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.2",
+    "@types/express": "^4.17.13",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "esbuild": "^0.14.48",
+    "typescript": "^4.7.4"
+  }
+}
