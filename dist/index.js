@@ -18351,8 +18351,8 @@ var require_send = __commonJS({
     };
     SendStream.prototype.from = deprecate.function(SendStream.prototype.root, "send.from: pass root as option");
     SendStream.prototype.root = deprecate.function(SendStream.prototype.root, "send.root: pass root as option");
-    SendStream.prototype.maxage = deprecate.function(function maxage(maxAge) {
-      this._maxage = typeof maxAge === "string" ? ms(maxAge) : Number(maxAge);
+    SendStream.prototype.maxage = deprecate.function(function maxage(maxAge2) {
+      this._maxage = typeof maxAge2 === "string" ? ms(maxAge2) : Number(maxAge2);
       this._maxage = !isNaN(this._maxage) ? Math.min(Math.max(0, this._maxage), MAX_MAXAGE) : 0;
       debug("max-age %d", this._maxage);
       return this;
@@ -20823,9 +20823,9 @@ var require_cookie_signature = __commonJS({
   }
 });
 
-// node_modules/cookie/index.js
+// node_modules/express/node_modules/cookie/index.js
 var require_cookie = __commonJS({
-  "node_modules/cookie/index.js"(exports) {
+  "node_modules/express/node_modules/cookie/index.js"(exports) {
     "use strict";
     exports.parse = parse;
     exports.serialize = serialize;
@@ -20878,11 +20878,11 @@ var require_cookie = __commonJS({
       }
       var str = name + "=" + value;
       if (opt.maxAge != null) {
-        var maxAge = opt.maxAge - 0;
-        if (isNaN(maxAge) || !isFinite(maxAge)) {
+        var maxAge2 = opt.maxAge - 0;
+        if (isNaN(maxAge2) || !isFinite(maxAge2)) {
           throw new TypeError("option maxAge is invalid");
         }
-        str += "; Max-Age=" + Math.floor(maxAge);
+        str += "; Max-Age=" + Math.floor(maxAge2);
       }
       if (opt.domain) {
         if (!fieldContentRegExp.test(opt.domain)) {
@@ -21407,10 +21407,10 @@ var require_response = __commonJS({
         val = "s:" + sign(val, secret);
       }
       if (opts.maxAge != null) {
-        var maxAge = opts.maxAge - 0;
-        if (!isNaN(maxAge)) {
-          opts.expires = new Date(Date.now() + maxAge);
-          opts.maxAge = Math.floor(maxAge / 1e3);
+        var maxAge2 = opts.maxAge - 0;
+        if (!isNaN(maxAge2)) {
+          opts.expires = new Date(Date.now() + maxAge2);
+          opts.maxAge = Math.floor(maxAge2 / 1e3);
         }
       }
       if (opts.path == null) {
@@ -45122,6 +45122,917 @@ var require_compression = __commonJS({
   }
 });
 
+// node_modules/express-session/node_modules/safe-buffer/index.js
+var require_safe_buffer4 = __commonJS({
+  "node_modules/express-session/node_modules/safe-buffer/index.js"(exports, module2) {
+    var buffer = require("buffer");
+    var Buffer2 = buffer.Buffer;
+    function copyProps(src, dst) {
+      for (var key in src) {
+        dst[key] = src[key];
+      }
+    }
+    if (Buffer2.from && Buffer2.alloc && Buffer2.allocUnsafe && Buffer2.allocUnsafeSlow) {
+      module2.exports = buffer;
+    } else {
+      copyProps(buffer, exports);
+      exports.Buffer = SafeBuffer;
+    }
+    function SafeBuffer(arg, encodingOrOffset, length) {
+      return Buffer2(arg, encodingOrOffset, length);
+    }
+    SafeBuffer.prototype = Object.create(Buffer2.prototype);
+    copyProps(Buffer2, SafeBuffer);
+    SafeBuffer.from = function(arg, encodingOrOffset, length) {
+      if (typeof arg === "number") {
+        throw new TypeError("Argument must not be a number");
+      }
+      return Buffer2(arg, encodingOrOffset, length);
+    };
+    SafeBuffer.alloc = function(size, fill, encoding) {
+      if (typeof size !== "number") {
+        throw new TypeError("Argument must be a number");
+      }
+      var buf = Buffer2(size);
+      if (fill !== void 0) {
+        if (typeof encoding === "string") {
+          buf.fill(fill, encoding);
+        } else {
+          buf.fill(fill);
+        }
+      } else {
+        buf.fill(0);
+      }
+      return buf;
+    };
+    SafeBuffer.allocUnsafe = function(size) {
+      if (typeof size !== "number") {
+        throw new TypeError("Argument must be a number");
+      }
+      return Buffer2(size);
+    };
+    SafeBuffer.allocUnsafeSlow = function(size) {
+      if (typeof size !== "number") {
+        throw new TypeError("Argument must be a number");
+      }
+      return buffer.SlowBuffer(size);
+    };
+  }
+});
+
+// node_modules/cookie/index.js
+var require_cookie2 = __commonJS({
+  "node_modules/cookie/index.js"(exports) {
+    "use strict";
+    exports.parse = parse;
+    exports.serialize = serialize;
+    var decode = decodeURIComponent;
+    var encode = encodeURIComponent;
+    var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
+    function parse(str, options) {
+      if (typeof str !== "string") {
+        throw new TypeError("argument str must be a string");
+      }
+      var obj = {};
+      var opt = options || {};
+      var pairs = str.split(";");
+      var dec = opt.decode || decode;
+      for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i];
+        var index = pair.indexOf("=");
+        if (index < 0) {
+          continue;
+        }
+        var key = pair.substring(0, index).trim();
+        if (obj[key] == void 0) {
+          var val = pair.substring(index + 1, pair.length).trim();
+          if (val[0] === '"') {
+            val = val.slice(1, -1);
+          }
+          obj[key] = tryDecode(val, dec);
+        }
+      }
+      return obj;
+    }
+    function serialize(name, val, options) {
+      var opt = options || {};
+      var enc = opt.encode || encode;
+      if (typeof enc !== "function") {
+        throw new TypeError("option encode is invalid");
+      }
+      if (!fieldContentRegExp.test(name)) {
+        throw new TypeError("argument name is invalid");
+      }
+      var value = enc(val);
+      if (value && !fieldContentRegExp.test(value)) {
+        throw new TypeError("argument val is invalid");
+      }
+      var str = name + "=" + value;
+      if (opt.maxAge != null) {
+        var maxAge2 = opt.maxAge - 0;
+        if (isNaN(maxAge2) || !isFinite(maxAge2)) {
+          throw new TypeError("option maxAge is invalid");
+        }
+        str += "; Max-Age=" + Math.floor(maxAge2);
+      }
+      if (opt.domain) {
+        if (!fieldContentRegExp.test(opt.domain)) {
+          throw new TypeError("option domain is invalid");
+        }
+        str += "; Domain=" + opt.domain;
+      }
+      if (opt.path) {
+        if (!fieldContentRegExp.test(opt.path)) {
+          throw new TypeError("option path is invalid");
+        }
+        str += "; Path=" + opt.path;
+      }
+      if (opt.expires) {
+        if (typeof opt.expires.toUTCString !== "function") {
+          throw new TypeError("option expires is invalid");
+        }
+        str += "; Expires=" + opt.expires.toUTCString();
+      }
+      if (opt.httpOnly) {
+        str += "; HttpOnly";
+      }
+      if (opt.secure) {
+        str += "; Secure";
+      }
+      if (opt.sameSite) {
+        var sameSite = typeof opt.sameSite === "string" ? opt.sameSite.toLowerCase() : opt.sameSite;
+        switch (sameSite) {
+          case true:
+            str += "; SameSite=Strict";
+            break;
+          case "lax":
+            str += "; SameSite=Lax";
+            break;
+          case "strict":
+            str += "; SameSite=Strict";
+            break;
+          case "none":
+            str += "; SameSite=None";
+            break;
+          default:
+            throw new TypeError("option sameSite is invalid");
+        }
+      }
+      return str;
+    }
+    function tryDecode(str, decode2) {
+      try {
+        return decode2(str);
+      } catch (e) {
+        return str;
+      }
+    }
+  }
+});
+
+// node_modules/random-bytes/index.js
+var require_random_bytes = __commonJS({
+  "node_modules/random-bytes/index.js"(exports, module2) {
+    "use strict";
+    var crypto = require("crypto");
+    var generateAttempts = crypto.randomBytes === crypto.pseudoRandomBytes ? 1 : 3;
+    module2.exports = randomBytes;
+    module2.exports.sync = randomBytesSync;
+    function randomBytes(size, callback) {
+      if (callback !== void 0 && typeof callback !== "function") {
+        throw new TypeError("argument callback must be a function");
+      }
+      if (!callback && !global.Promise) {
+        throw new TypeError("argument callback is required");
+      }
+      if (callback) {
+        return generateRandomBytes(size, generateAttempts, callback);
+      }
+      return new Promise(function executor(resolve, reject) {
+        generateRandomBytes(size, generateAttempts, function onRandomBytes(err, str) {
+          if (err)
+            return reject(err);
+          resolve(str);
+        });
+      });
+    }
+    function randomBytesSync(size) {
+      var err = null;
+      for (var i = 0; i < generateAttempts; i++) {
+        try {
+          return crypto.randomBytes(size);
+        } catch (e) {
+          err = e;
+        }
+      }
+      throw err;
+    }
+    function generateRandomBytes(size, attempts, callback) {
+      crypto.randomBytes(size, function onRandomBytes(err, buf) {
+        if (!err)
+          return callback(null, buf);
+        if (!--attempts)
+          return callback(err);
+        setTimeout(generateRandomBytes.bind(null, size, attempts, callback), 10);
+      });
+    }
+  }
+});
+
+// node_modules/uid-safe/index.js
+var require_uid_safe = __commonJS({
+  "node_modules/uid-safe/index.js"(exports, module2) {
+    "use strict";
+    var randomBytes = require_random_bytes();
+    var EQUAL_END_REGEXP = /=+$/;
+    var PLUS_GLOBAL_REGEXP = /\+/g;
+    var SLASH_GLOBAL_REGEXP = /\//g;
+    module2.exports = uid;
+    module2.exports.sync = uidSync;
+    function uid(length, callback) {
+      if (callback !== void 0 && typeof callback !== "function") {
+        throw new TypeError("argument callback must be a function");
+      }
+      if (!callback && !global.Promise) {
+        throw new TypeError("argument callback is required");
+      }
+      if (callback) {
+        return generateUid(length, callback);
+      }
+      return new Promise(function executor(resolve, reject) {
+        generateUid(length, function onUid(err, str) {
+          if (err)
+            return reject(err);
+          resolve(str);
+        });
+      });
+    }
+    function uidSync(length) {
+      return toString(randomBytes.sync(length));
+    }
+    function generateUid(length, callback) {
+      randomBytes(length, function(err, buf) {
+        if (err)
+          return callback(err);
+        callback(null, toString(buf));
+      });
+    }
+    function toString(buf) {
+      return buf.toString("base64").replace(EQUAL_END_REGEXP, "").replace(PLUS_GLOBAL_REGEXP, "-").replace(SLASH_GLOBAL_REGEXP, "_");
+    }
+  }
+});
+
+// node_modules/express-session/session/cookie.js
+var require_cookie3 = __commonJS({
+  "node_modules/express-session/session/cookie.js"(exports, module2) {
+    "use strict";
+    var cookie = require_cookie2();
+    var deprecate = require_depd()("express-session");
+    var Cookie = module2.exports = function Cookie2(options) {
+      this.path = "/";
+      this.maxAge = null;
+      this.httpOnly = true;
+      if (options) {
+        if (typeof options !== "object") {
+          throw new TypeError("argument options must be a object");
+        }
+        for (var key in options) {
+          if (key !== "data") {
+            this[key] = options[key];
+          }
+        }
+      }
+      if (this.originalMaxAge === void 0 || this.originalMaxAge === null) {
+        this.originalMaxAge = this.maxAge;
+      }
+    };
+    Cookie.prototype = {
+      set expires(date) {
+        this._expires = date;
+        this.originalMaxAge = this.maxAge;
+      },
+      get expires() {
+        return this._expires;
+      },
+      set maxAge(ms) {
+        if (ms && typeof ms !== "number" && !(ms instanceof Date)) {
+          throw new TypeError("maxAge must be a number or Date");
+        }
+        if (ms instanceof Date) {
+          deprecate("maxAge as Date; pass number of milliseconds instead");
+        }
+        this.expires = typeof ms === "number" ? new Date(Date.now() + ms) : ms;
+      },
+      get maxAge() {
+        return this.expires instanceof Date ? this.expires.valueOf() - Date.now() : this.expires;
+      },
+      get data() {
+        return {
+          originalMaxAge: this.originalMaxAge,
+          expires: this._expires,
+          secure: this.secure,
+          httpOnly: this.httpOnly,
+          domain: this.domain,
+          path: this.path,
+          sameSite: this.sameSite
+        };
+      },
+      serialize: function(name, val) {
+        return cookie.serialize(name, val, this.data);
+      },
+      toJSON: function() {
+        return this.data;
+      }
+    };
+  }
+});
+
+// node_modules/express-session/session/session.js
+var require_session = __commonJS({
+  "node_modules/express-session/session/session.js"(exports, module2) {
+    "use strict";
+    module2.exports = Session;
+    function Session(req, data) {
+      Object.defineProperty(this, "req", { value: req });
+      Object.defineProperty(this, "id", { value: req.sessionID });
+      if (typeof data === "object" && data !== null) {
+        for (var prop in data) {
+          if (!(prop in this)) {
+            this[prop] = data[prop];
+          }
+        }
+      }
+    }
+    defineMethod(Session.prototype, "touch", function touch() {
+      return this.resetMaxAge();
+    });
+    defineMethod(Session.prototype, "resetMaxAge", function resetMaxAge() {
+      this.cookie.maxAge = this.cookie.originalMaxAge;
+      return this;
+    });
+    defineMethod(Session.prototype, "save", function save(fn) {
+      this.req.sessionStore.set(this.id, this, fn || function() {
+      });
+      return this;
+    });
+    defineMethod(Session.prototype, "reload", function reload(fn) {
+      var req = this.req;
+      var store = this.req.sessionStore;
+      store.get(this.id, function(err, sess) {
+        if (err)
+          return fn(err);
+        if (!sess)
+          return fn(new Error("failed to load session"));
+        store.createSession(req, sess);
+        fn();
+      });
+      return this;
+    });
+    defineMethod(Session.prototype, "destroy", function destroy(fn) {
+      delete this.req.session;
+      this.req.sessionStore.destroy(this.id, fn);
+      return this;
+    });
+    defineMethod(Session.prototype, "regenerate", function regenerate(fn) {
+      this.req.sessionStore.regenerate(this.req, fn);
+      return this;
+    });
+    function defineMethod(obj, name, fn) {
+      Object.defineProperty(obj, name, {
+        configurable: true,
+        enumerable: false,
+        value: fn,
+        writable: true
+      });
+    }
+  }
+});
+
+// node_modules/express-session/session/store.js
+var require_store = __commonJS({
+  "node_modules/express-session/session/store.js"(exports, module2) {
+    "use strict";
+    var Cookie = require_cookie3();
+    var EventEmitter = require("events").EventEmitter;
+    var Session = require_session();
+    var util = require("util");
+    module2.exports = Store;
+    function Store() {
+      EventEmitter.call(this);
+    }
+    util.inherits(Store, EventEmitter);
+    Store.prototype.regenerate = function(req, fn) {
+      var self = this;
+      this.destroy(req.sessionID, function(err) {
+        self.generate(req);
+        fn(err);
+      });
+    };
+    Store.prototype.load = function(sid, fn) {
+      var self = this;
+      this.get(sid, function(err, sess) {
+        if (err)
+          return fn(err);
+        if (!sess)
+          return fn();
+        var req = { sessionID: sid, sessionStore: self };
+        fn(null, self.createSession(req, sess));
+      });
+    };
+    Store.prototype.createSession = function(req, sess) {
+      var expires = sess.cookie.expires;
+      var originalMaxAge = sess.cookie.originalMaxAge;
+      sess.cookie = new Cookie(sess.cookie);
+      if (typeof expires === "string") {
+        sess.cookie.expires = new Date(expires);
+      }
+      sess.cookie.originalMaxAge = originalMaxAge;
+      req.session = new Session(req, sess);
+      return req.session;
+    };
+  }
+});
+
+// node_modules/express-session/session/memory.js
+var require_memory2 = __commonJS({
+  "node_modules/express-session/session/memory.js"(exports, module2) {
+    "use strict";
+    var Store = require_store();
+    var util = require("util");
+    var defer = typeof setImmediate === "function" ? setImmediate : function(fn) {
+      process.nextTick(fn.bind.apply(fn, arguments));
+    };
+    module2.exports = MemoryStore;
+    function MemoryStore() {
+      Store.call(this);
+      this.sessions = /* @__PURE__ */ Object.create(null);
+    }
+    util.inherits(MemoryStore, Store);
+    MemoryStore.prototype.all = function all(callback) {
+      var sessionIds = Object.keys(this.sessions);
+      var sessions = /* @__PURE__ */ Object.create(null);
+      for (var i = 0; i < sessionIds.length; i++) {
+        var sessionId = sessionIds[i];
+        var session2 = getSession.call(this, sessionId);
+        if (session2) {
+          sessions[sessionId] = session2;
+        }
+      }
+      callback && defer(callback, null, sessions);
+    };
+    MemoryStore.prototype.clear = function clear(callback) {
+      this.sessions = /* @__PURE__ */ Object.create(null);
+      callback && defer(callback);
+    };
+    MemoryStore.prototype.destroy = function destroy(sessionId, callback) {
+      delete this.sessions[sessionId];
+      callback && defer(callback);
+    };
+    MemoryStore.prototype.get = function get(sessionId, callback) {
+      defer(callback, null, getSession.call(this, sessionId));
+    };
+    MemoryStore.prototype.set = function set(sessionId, session2, callback) {
+      this.sessions[sessionId] = JSON.stringify(session2);
+      callback && defer(callback);
+    };
+    MemoryStore.prototype.length = function length(callback) {
+      this.all(function(err, sessions) {
+        if (err)
+          return callback(err);
+        callback(null, Object.keys(sessions).length);
+      });
+    };
+    MemoryStore.prototype.touch = function touch(sessionId, session2, callback) {
+      var currentSession = getSession.call(this, sessionId);
+      if (currentSession) {
+        currentSession.cookie = session2.cookie;
+        this.sessions[sessionId] = JSON.stringify(currentSession);
+      }
+      callback && defer(callback);
+    };
+    function getSession(sessionId) {
+      var sess = this.sessions[sessionId];
+      if (!sess) {
+        return;
+      }
+      sess = JSON.parse(sess);
+      if (sess.cookie) {
+        var expires = typeof sess.cookie.expires === "string" ? new Date(sess.cookie.expires) : sess.cookie.expires;
+        if (expires && expires <= Date.now()) {
+          delete this.sessions[sessionId];
+          return;
+        }
+      }
+      return sess;
+    }
+  }
+});
+
+// node_modules/express-session/index.js
+var require_express_session = __commonJS({
+  "node_modules/express-session/index.js"(exports, module2) {
+    "use strict";
+    var Buffer2 = require_safe_buffer4().Buffer;
+    var cookie = require_cookie2();
+    var crypto = require("crypto");
+    var debug = require_src()("express-session");
+    var deprecate = require_depd()("express-session");
+    var onHeaders = require_on_headers();
+    var parseUrl = require_parseurl();
+    var signature = require_cookie_signature();
+    var uid = require_uid_safe().sync;
+    var Cookie = require_cookie3();
+    var MemoryStore = require_memory2();
+    var Session = require_session();
+    var Store = require_store();
+    var env = process.env.NODE_ENV;
+    exports = module2.exports = session2;
+    exports.Store = Store;
+    exports.Cookie = Cookie;
+    exports.Session = Session;
+    exports.MemoryStore = MemoryStore;
+    var warning = "Warning: connect.session() MemoryStore is not\ndesigned for a production environment, as it will leak\nmemory, and will not scale past a single process.";
+    var defer = typeof setImmediate === "function" ? setImmediate : function(fn) {
+      process.nextTick(fn.bind.apply(fn, arguments));
+    };
+    function session2(options) {
+      var opts = options || {};
+      var cookieOptions = opts.cookie || {};
+      var generateId = opts.genid || generateSessionId;
+      var name = opts.name || opts.key || "connect.sid";
+      var store = opts.store || new MemoryStore();
+      var trustProxy = opts.proxy;
+      var resaveSession = opts.resave;
+      var rollingSessions = Boolean(opts.rolling);
+      var saveUninitializedSession = opts.saveUninitialized;
+      var secret = opts.secret;
+      if (typeof generateId !== "function") {
+        throw new TypeError("genid option must be a function");
+      }
+      if (resaveSession === void 0) {
+        deprecate("undefined resave option; provide resave option");
+        resaveSession = true;
+      }
+      if (saveUninitializedSession === void 0) {
+        deprecate("undefined saveUninitialized option; provide saveUninitialized option");
+        saveUninitializedSession = true;
+      }
+      if (opts.unset && opts.unset !== "destroy" && opts.unset !== "keep") {
+        throw new TypeError('unset option must be "destroy" or "keep"');
+      }
+      var unsetDestroy = opts.unset === "destroy";
+      if (Array.isArray(secret) && secret.length === 0) {
+        throw new TypeError("secret option array must contain one or more strings");
+      }
+      if (secret && !Array.isArray(secret)) {
+        secret = [secret];
+      }
+      if (!secret) {
+        deprecate("req.secret; provide secret option");
+      }
+      if (env === "production" && store instanceof MemoryStore) {
+        console.warn(warning);
+      }
+      store.generate = function(req) {
+        req.sessionID = generateId(req);
+        req.session = new Session(req);
+        req.session.cookie = new Cookie(cookieOptions);
+        if (cookieOptions.secure === "auto") {
+          req.session.cookie.secure = issecure(req, trustProxy);
+        }
+      };
+      var storeImplementsTouch = typeof store.touch === "function";
+      var storeReady = true;
+      store.on("disconnect", function ondisconnect() {
+        storeReady = false;
+      });
+      store.on("connect", function onconnect() {
+        storeReady = true;
+      });
+      return function session3(req, res, next) {
+        if (req.session) {
+          next();
+          return;
+        }
+        if (!storeReady) {
+          debug("store is disconnected");
+          next();
+          return;
+        }
+        var originalPath = parseUrl.original(req).pathname || "/";
+        if (originalPath.indexOf(cookieOptions.path || "/") !== 0)
+          return next();
+        if (!secret && !req.secret) {
+          next(new Error("secret option required for sessions"));
+          return;
+        }
+        var secrets = secret || [req.secret];
+        var originalHash;
+        var originalId;
+        var savedHash;
+        var touched = false;
+        req.sessionStore = store;
+        var cookieId = req.sessionID = getcookie(req, name, secrets);
+        onHeaders(res, function() {
+          if (!req.session) {
+            debug("no session");
+            return;
+          }
+          if (!shouldSetCookie(req)) {
+            return;
+          }
+          if (req.session.cookie.secure && !issecure(req, trustProxy)) {
+            debug("not secured");
+            return;
+          }
+          if (!touched) {
+            req.session.touch();
+            touched = true;
+          }
+          setcookie(res, name, req.sessionID, secrets[0], req.session.cookie.data);
+        });
+        var _end = res.end;
+        var _write = res.write;
+        var ended = false;
+        res.end = function end(chunk, encoding) {
+          if (ended) {
+            return false;
+          }
+          ended = true;
+          var ret;
+          var sync = true;
+          function writeend() {
+            if (sync) {
+              ret = _end.call(res, chunk, encoding);
+              sync = false;
+              return;
+            }
+            _end.call(res);
+          }
+          function writetop() {
+            if (!sync) {
+              return ret;
+            }
+            if (!res._header) {
+              res._implicitHeader();
+            }
+            if (chunk == null) {
+              ret = true;
+              return ret;
+            }
+            var contentLength = Number(res.getHeader("Content-Length"));
+            if (!isNaN(contentLength) && contentLength > 0) {
+              chunk = !Buffer2.isBuffer(chunk) ? Buffer2.from(chunk, encoding) : chunk;
+              encoding = void 0;
+              if (chunk.length !== 0) {
+                debug("split response");
+                ret = _write.call(res, chunk.slice(0, chunk.length - 1));
+                chunk = chunk.slice(chunk.length - 1, chunk.length);
+                return ret;
+              }
+            }
+            ret = _write.call(res, chunk, encoding);
+            sync = false;
+            return ret;
+          }
+          if (shouldDestroy(req)) {
+            debug("destroying");
+            store.destroy(req.sessionID, function ondestroy(err) {
+              if (err) {
+                defer(next, err);
+              }
+              debug("destroyed");
+              writeend();
+            });
+            return writetop();
+          }
+          if (!req.session) {
+            debug("no session");
+            return _end.call(res, chunk, encoding);
+          }
+          if (!touched) {
+            req.session.touch();
+            touched = true;
+          }
+          if (shouldSave(req)) {
+            req.session.save(function onsave(err) {
+              if (err) {
+                defer(next, err);
+              }
+              writeend();
+            });
+            return writetop();
+          } else if (storeImplementsTouch && shouldTouch(req)) {
+            debug("touching");
+            store.touch(req.sessionID, req.session, function ontouch(err) {
+              if (err) {
+                defer(next, err);
+              }
+              debug("touched");
+              writeend();
+            });
+            return writetop();
+          }
+          return _end.call(res, chunk, encoding);
+        };
+        function generate() {
+          store.generate(req);
+          originalId = req.sessionID;
+          originalHash = hash(req.session);
+          wrapmethods(req.session);
+        }
+        function inflate(req2, sess) {
+          store.createSession(req2, sess);
+          originalId = req2.sessionID;
+          originalHash = hash(sess);
+          if (!resaveSession) {
+            savedHash = originalHash;
+          }
+          wrapmethods(req2.session);
+        }
+        function rewrapmethods(sess, callback) {
+          return function() {
+            if (req.session !== sess) {
+              wrapmethods(req.session);
+            }
+            callback.apply(this, arguments);
+          };
+        }
+        function wrapmethods(sess) {
+          var _reload = sess.reload;
+          var _save = sess.save;
+          function reload(callback) {
+            debug("reloading %s", this.id);
+            _reload.call(this, rewrapmethods(this, callback));
+          }
+          function save() {
+            debug("saving %s", this.id);
+            savedHash = hash(this);
+            _save.apply(this, arguments);
+          }
+          Object.defineProperty(sess, "reload", {
+            configurable: true,
+            enumerable: false,
+            value: reload,
+            writable: true
+          });
+          Object.defineProperty(sess, "save", {
+            configurable: true,
+            enumerable: false,
+            value: save,
+            writable: true
+          });
+        }
+        function isModified(sess) {
+          return originalId !== sess.id || originalHash !== hash(sess);
+        }
+        function isSaved(sess) {
+          return originalId === sess.id && savedHash === hash(sess);
+        }
+        function shouldDestroy(req2) {
+          return req2.sessionID && unsetDestroy && req2.session == null;
+        }
+        function shouldSave(req2) {
+          if (typeof req2.sessionID !== "string") {
+            debug("session ignored because of bogus req.sessionID %o", req2.sessionID);
+            return false;
+          }
+          return !saveUninitializedSession && !savedHash && cookieId !== req2.sessionID ? isModified(req2.session) : !isSaved(req2.session);
+        }
+        function shouldTouch(req2) {
+          if (typeof req2.sessionID !== "string") {
+            debug("session ignored because of bogus req.sessionID %o", req2.sessionID);
+            return false;
+          }
+          return cookieId === req2.sessionID && !shouldSave(req2);
+        }
+        function shouldSetCookie(req2) {
+          if (typeof req2.sessionID !== "string") {
+            return false;
+          }
+          return cookieId !== req2.sessionID ? saveUninitializedSession || isModified(req2.session) : rollingSessions || req2.session.cookie.expires != null && isModified(req2.session);
+        }
+        if (!req.sessionID) {
+          debug("no SID sent, generating session");
+          generate();
+          next();
+          return;
+        }
+        debug("fetching %s", req.sessionID);
+        store.get(req.sessionID, function(err, sess) {
+          if (err && err.code !== "ENOENT") {
+            debug("error %j", err);
+            next(err);
+            return;
+          }
+          try {
+            if (err || !sess) {
+              debug("no session found");
+              generate();
+            } else {
+              debug("session found");
+              inflate(req, sess);
+            }
+          } catch (e) {
+            next(e);
+            return;
+          }
+          next();
+        });
+      };
+    }
+    function generateSessionId(sess) {
+      return uid(24);
+    }
+    function getcookie(req, name, secrets) {
+      var header = req.headers.cookie;
+      var raw;
+      var val;
+      if (header) {
+        var cookies = cookie.parse(header);
+        raw = cookies[name];
+        if (raw) {
+          if (raw.substr(0, 2) === "s:") {
+            val = unsigncookie(raw.slice(2), secrets);
+            if (val === false) {
+              debug("cookie signature invalid");
+              val = void 0;
+            }
+          } else {
+            debug("cookie unsigned");
+          }
+        }
+      }
+      if (!val && req.signedCookies) {
+        val = req.signedCookies[name];
+        if (val) {
+          deprecate("cookie should be available in req.headers.cookie");
+        }
+      }
+      if (!val && req.cookies) {
+        raw = req.cookies[name];
+        if (raw) {
+          if (raw.substr(0, 2) === "s:") {
+            val = unsigncookie(raw.slice(2), secrets);
+            if (val) {
+              deprecate("cookie should be available in req.headers.cookie");
+            }
+            if (val === false) {
+              debug("cookie signature invalid");
+              val = void 0;
+            }
+          } else {
+            debug("cookie unsigned");
+          }
+        }
+      }
+      return val;
+    }
+    function hash(sess) {
+      var str = JSON.stringify(sess, function(key, val) {
+        if (this === sess && key === "cookie") {
+          return;
+        }
+        return val;
+      });
+      return crypto.createHash("sha1").update(str, "utf8").digest("hex");
+    }
+    function issecure(req, trustProxy) {
+      if (req.connection && req.connection.encrypted) {
+        return true;
+      }
+      if (trustProxy === false) {
+        return false;
+      }
+      if (trustProxy !== true) {
+        return req.secure === true;
+      }
+      var header = req.headers["x-forwarded-proto"] || "";
+      var index = header.indexOf(",");
+      var proto = index !== -1 ? header.substr(0, index).toLowerCase().trim() : header.toLowerCase().trim();
+      return proto === "https";
+    }
+    function setcookie(res, name, val, secret, options) {
+      var signed = "s:" + signature.sign(val, secret);
+      var data = cookie.serialize(name, signed, options);
+      debug("set-cookie %s", data);
+      var prev = res.getHeader("Set-Cookie") || [];
+      var header = Array.isArray(prev) ? prev.concat(data) : [prev, data];
+      res.setHeader("Set-Cookie", header);
+    }
+    function unsigncookie(val, secrets) {
+      for (var i = 0; i < secrets.length; i++) {
+        var result = signature.unsign(val, secrets[i]);
+        if (result !== false) {
+          return result;
+        }
+      }
+      return false;
+    }
+  }
+});
+
 // src/index.ts
 var import_express = __toESM(require_express2());
 var import_fs3 = __toESM(require("fs"));
@@ -45208,8 +46119,60 @@ var reactHandler = (req, res) => {
 
 // src/index.ts
 var import_compression = __toESM(require_compression());
+var import_express_session = __toESM(require_express_session());
+
+// src/modules/restricted.ts
+var restricted = (req, res, next) => {
+  if (!req.session.authorized) {
+    res.sendStatus(403);
+    return;
+  }
+  next();
+};
+
+// src/modules/cms/cms.ts
+var CmsApp = (app2) => {
+  app2.get("/cms", restricted, (_, res) => {
+    res.send("CMS Area");
+  });
+};
+
+// src/modules/web-builder/web-builder.ts
+var WebBuilderApp = (app2) => {
+  app2.get("/web-builder", restricted, (_, res) => {
+    res.send("Web builder area");
+  });
+  app2.post("/web-builder/save", restricted, (_, res) => {
+    res.send("Web builder area");
+  });
+};
+
+// src/modules/plugins/plugins.ts
+var PluginsApp = (app2) => {
+  app2.get("/plugins", restricted, (_, res) => {
+    res.send("Plugins Area");
+  });
+  app2.delete("/plugins/:id", restricted, (_, res) => {
+    res.send("Plugins Area");
+  });
+};
+
+// src/index.ts
 var app = (0, import_express.default)();
+var COOKIE_MAX_AGE_MINITUES = 15;
+var maxAge = process.env.COOKIE_MAX_AGE ? parseFloat(process.env.COOKIE_MAX_AGE) : 1e3 * 60 * COOKIE_MAX_AGE_MINITUES;
 app.use((0, import_compression.default)());
+app.set("trust proxy", 1);
+app.use((0, import_express_session.default)({
+  name: "sesid",
+  secret: process.env.COOKIE_SECRET || "restricted-area-" + Math.random(),
+  cookie: {
+    path: "/",
+    httpOnly: true,
+    sameSite: true,
+    maxAge
+  }
+}));
 var jsonPostHandler = (req, res) => {
   const ws = import_fs3.default.createWriteStream("./public/page-config.json");
   req.pipe(ws);
@@ -45230,6 +46193,16 @@ app.use("/client.js", (_, res) => {
 app.use("/plugins.json", (_, res) => {
   res.sendFile(import_path2.default.join(process.cwd(), "./public/plugins-config.json"));
 });
+app.get("/authorize", (req, res) => {
+  console.log(`SessionID: ${req.sessionID}`);
+  if (!req.session.authorized) {
+    req.session.authorized = 1;
+  }
+  res.sendStatus(200);
+});
+CmsApp(app);
+WebBuilderApp(app);
+PluginsApp(app);
 app.listen(process.env.PORT || "3000", () => {
   console.log("Starting app on");
   console.log(`localhost:${process.env.PORT || "3000"}`);
@@ -45239,6 +46212,27 @@ object-assign
 (c) Sindre Sorhus
 @license MIT
 */
+/*!
+ * Connect - session - Cookie
+ * Copyright(c) 2010 Sencha Inc.
+ * Copyright(c) 2011 TJ Holowaychuk
+ * MIT Licensed
+ */
+/*!
+ * Connect - session - Session
+ * Copyright(c) 2010 Sencha Inc.
+ * Copyright(c) 2011 TJ Holowaychuk
+ * MIT Licensed
+ */
+/*!
+ * Connect - session - Store
+ * Copyright(c) 2010 Sencha Inc.
+ * Copyright(c) 2011 TJ Holowaychuk
+ * MIT Licensed
+ */
+/*!
+ * Prototype.
+ */
 /*!
  * accepts
  * Copyright(c) 2014 Jonathan Ong
@@ -45340,6 +46334,20 @@ object-assign
  * MIT Licensed
  */
 /*!
+ * express-session
+ * Copyright(c) 2010 Sencha Inc.
+ * Copyright(c) 2011 TJ Holowaychuk
+ * Copyright(c) 2014-2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+/*!
+ * express-session
+ * Copyright(c) 2010 Sencha Inc.
+ * Copyright(c) 2011 TJ Holowaychuk
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+/*!
  * finalhandler
  * Copyright(c) 2014-2022 Douglas Christopher Wilson
  * MIT Licensed
@@ -45420,6 +46428,11 @@ object-assign
  * MIT Licensed
  */
 /*!
+ * random-bytes
+ * Copyright(c) 2016 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+/*!
  * range-parser
  * Copyright(c) 2012-2014 TJ Holowaychuk
  * Copyright(c) 2015-2016 Douglas Christopher Wilson
@@ -45459,6 +46472,12 @@ object-assign
  * type-is
  * Copyright(c) 2014 Jonathan Ong
  * Copyright(c) 2014-2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+/*!
+ * uid-safe
+ * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2015-2017 Douglas Christopher Wilson
  * MIT Licensed
  */
 /*!
