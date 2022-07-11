@@ -7,8 +7,6 @@ const multerMiddleware = multer({ dest: "./uploads" });
 
 export const middleware = multerMiddleware.single("attachment");
 export const installHandler: RequestHandler = (req, res) => {
-  console.log(req.files);
-  console.log(req.file);
   const pluginsConfig = getPluginsConfig();
   const pluginName = req.query["pluginName"]?.toString();
 
@@ -16,7 +14,6 @@ export const installHandler: RequestHandler = (req, res) => {
     const finalName = `${req.file.path}.zip`;
 
     fs.renameSync(req.file?.path, finalName);
-    console.log(`unzip ${finalName} -d ./uploads/${pluginName}/`);
     ps.exec(
       `unzip ${finalName} -d ./uploads/${pluginName}/ && mv ./uploads/${pluginName}/build/* ./uploads/${pluginName}/ && rmdir ./uploads/${pluginName}/build`,
       (err) => {
