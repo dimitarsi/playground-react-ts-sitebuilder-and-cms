@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "sources": ["../../src/components/paragraph.tsx"],
+  "sourceRoot": "./src",
+  "sourcesContent": ["import React from \"react\";\n\nexport const Component = () => {\n  return <div>Hello World</div>;\n};\n\nif (typeof window !== \"undefined\") {\n  // @ts-ignore\n  window.registerComponent(\"paragraph\", Component);\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,mBAAkB;AAEX,IAAM,YAAY,MAAM;AAC7B,SAAO,mDAAC,aAAI,aAAW;AACzB;AAEA,IAAI,OAAO,WAAW,aAAa;AAEjC,SAAO,kBAAkB,aAAa,SAAS;AACjD;",
+  "names": []
+}

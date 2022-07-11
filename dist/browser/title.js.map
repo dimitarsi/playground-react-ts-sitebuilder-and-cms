@@ -1,8 +1,8 @@
 {
   "version": 3,
-  "sources": ["../../src/components/title.tsx"],
+  "sources": ["../../src/components/title.tsx", "../../src/components/clickHandler.ts"],
   "sourceRoot": "./src",
-  "sourcesContent": ["import e from \"express\";\nimport React, { useEffect, useState } from \"react\";\n\nexport const Component = () => {\n  const handleClick = () => {\n    console.log(\"Component hydrated succesfully\");\n  };\n  const title = \"foobar\";\n\n  return <h1 onClick={handleClick}>{title}</h1>;\n};\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AACA,mBAA2C;AAEpC,IAAM,YAAY,MAAM;AAC7B,QAAM,cAAc,MAAM;AACxB,YAAQ,IAAI,gCAAgC;AAAA,EAC9C;AACA,QAAM,QAAQ;AAEd,SAAO,mDAAC;AAAA,IAAG,SAAS;AAAA,KAAc,KAAM;AAC1C;",
+  "sourcesContent": ["import e from \"express\";\nimport React, { useEffect, useState } from \"react\";\nimport { clickHandler } from \"./clickHandler\";\n\nexport const Component = () => {\n  const title = \"foobar\";\n\n  return <h1 onClick={clickHandler}>{title}</h1>;\n};\n", "export const clickHandler = () => {\n  console.log(\"another message\");\n};\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AACA,mBAA2C;;;ACDpC,IAAM,eAAe,MAAM;AAChC,UAAQ,IAAI,iBAAiB;AAC/B;;;ADEO,IAAM,YAAY,MAAM;AAC7B,QAAM,QAAQ;AAEd,SAAO,mDAAC;AAAA,IAAG,SAAS;AAAA,KAAe,KAAM;AAC3C;",
   "names": []
 }

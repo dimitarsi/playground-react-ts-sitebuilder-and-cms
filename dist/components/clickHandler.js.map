@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "sources": ["../../src/components/clickHandler.ts"],
+  "sourceRoot": "./src",
+  "sourcesContent": ["export const clickHandler = () => {\n  console.log(\"another message\");\n};\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAO,IAAM,eAAe,MAAM;AAChC,UAAQ,IAAI,iBAAiB;AAC/B;",
+  "names": []
+}

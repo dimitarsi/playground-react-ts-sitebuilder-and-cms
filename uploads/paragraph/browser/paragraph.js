@@ -29,26 +29,19 @@ var Component = (() => {
   var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // src/components/title.tsx
-  var title_exports = {};
-  __export(title_exports, {
+  // src/components/paragraph.tsx
+  var paragraph_exports = {};
+  __export(paragraph_exports, {
     Component: () => Component
   });
   var import_react = __toESM(__require("react"));
-
-  // src/components/clickHandler.ts
-  var clickHandler = () => {
-    console.log("another message");
-  };
-
-  // src/components/title.tsx
   var Component = () => {
-    const title = "foobar";
-    return /* @__PURE__ */ import_react.default.createElement("h1", {
-      onClick: clickHandler
-    }, title);
+    return /* @__PURE__ */ import_react.default.createElement("div", null, "Hello World");
   };
-  return __toCommonJS(title_exports);
+  if (typeof window !== "undefined") {
+    window.registerComponent("paragraph", Component);
+  }
+  return __toCommonJS(paragraph_exports);
 })();
-window.Components.push({plugin: 'title', Component: Component.Component})}
-//# sourceMappingURL=title.js.map
+window.Components.push({plugin: 'paragraph', Component: Component.Component})}
+//# sourceMappingURL=paragraph.js.map

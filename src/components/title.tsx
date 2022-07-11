@@ -1,11 +1,9 @@
 import e from "express";
 import React, { useEffect, useState } from "react";
+import { clickHandler } from "./clickHandler";
 
 export const Component = () => {
-  const handleClick = () => {
-    console.log("Component hydrated succesfully");
-  };
   const title = "foobar";
 
-  return <h1 onClick={handleClick}>{title}</h1>;
+  return <h1 onClick={clickHandler}>{title}</h1>;
 };

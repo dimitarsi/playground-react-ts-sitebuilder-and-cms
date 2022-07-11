@@ -2127,13 +2127,17 @@ __export(title_exports, {
 });
 module.exports = __toCommonJS(title_exports);
 var import_react = __toESM(require_react());
+
+// src/components/clickHandler.ts
+var clickHandler = () => {
+  console.log("another message");
+};
+
+// src/components/title.tsx
 var Component = () => {
-  const handleClick = () => {
-    console.log("Component hydrated succesfully");
-  };
   const title = "foobar";
   return /* @__PURE__ */ import_react.default.createElement("h1", {
-    onClick: handleClick
+    onClick: clickHandler
   }, title);
 };
 // Annotate the CommonJS export names for ESM import in node:

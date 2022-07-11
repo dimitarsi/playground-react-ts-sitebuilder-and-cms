@@ -17,6 +17,8 @@ const maxAge = process.env.COOKIE_MAX_AGE
   ? parseFloat(process.env.COOKIE_MAX_AGE)
   : 1000 * 60 * COOKIE_MAX_AGE_MINITUES;
 
+const pluginsJsonPath = path.join(process.cwd(), "./public/plugins.json");
+
 app.use(compression());
 app.set("trust proxy", 1);
 app.use(
@@ -54,7 +56,31 @@ app.use("/client.js", (_, res) => {
   res.sendFile(path.join(process.cwd(), "./dist/client.js"));
 });
 app.use("/plugins.json", (_, res) => {
-  res.sendFile(path.join(process.cwd(), "./public/plugins-config.json"));
+  res.sendFile(pluginsJsonPath);
+});
+app.use("/plugins.js", (_, res) => {
+  const { plugins } = JSON.parse(fs.readFileSync(pluginsJsonPath).toString());
+  const filesToServe = plugins.map((p: { browserEntry: string }) =>
+    path.join(process.cwd(), "./uploads", p.browserEntry)
+  );
+
+  function pipeNext() {
+    const next = filesToServe.shift();
+    const rs = fs.createReadStream(next);
+
+    const options = {
+      end: !Boolean(filesToServe.length),
+    };
+
+    if (next && !options.end) {
+      rs.once("close", pipeNext);
+    }
+
+    if (next) {
+      rs.pipe(res, options);
+    }
+  }
+  pipeNext();
 });
 
 app.get("/authorize", (req, res) => {

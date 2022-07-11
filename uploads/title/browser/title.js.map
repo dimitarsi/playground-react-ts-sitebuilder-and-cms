@@ -1,8 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/components/title.tsx"],
-  "sourceRoot": "./src",
-  "sourcesContent": ["import e from \"express\";\nimport React, { useEffect, useState } from \"react\";\n\nexport const Component = () => {\n  const handleClick = () => {\n    console.log(\"Component hydrated succesfully\");\n  };\n  const title = \"foobar\";\n\n  return <h1 onClick={handleClick}>{title}</h1>;\n};\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AACA,qBAA2C;AAEpC,MAAM,YAAY,MAAM;AAC7B,UAAM,cAAc,MAAM;AACxB,cAAQ,IAAI,gCAAgC;AAAA,IAC9C;AACA,UAAM,QAAQ;AAEd,WAAO,mDAAC;AAAA,MAAG,SAAS;AAAA,OAAc,KAAM;AAAA,EAC1C;",
-  "names": []
-}

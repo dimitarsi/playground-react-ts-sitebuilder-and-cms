@@ -1,0 +1,1 @@
+{"plugins":[{"browserEntry":"./paragraph/browser/paragraph.js","serverEntry":"./paragraph/node/paragraph.js","pluginName":"paragraph"}]}

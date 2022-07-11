@@ -20,28 +20,21 @@ var __copyProps = (to, from, except, desc) => {
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// src/components/title.tsx
-var title_exports = {};
-__export(title_exports, {
+// src/components/paragraph.tsx
+var paragraph_exports = {};
+__export(paragraph_exports, {
   Component: () => Component
 });
-module.exports = __toCommonJS(title_exports);
+module.exports = __toCommonJS(paragraph_exports);
 var import_react = __toESM(require("react"));
-
-// src/components/clickHandler.ts
-var clickHandler = () => {
-  console.log("another message");
-};
-
-// src/components/title.tsx
 var Component = () => {
-  const title = "foobar";
-  return /* @__PURE__ */ import_react.default.createElement("h1", {
-    onClick: clickHandler
-  }, title);
+  return /* @__PURE__ */ import_react.default.createElement("div", null, "Hello World");
 };
+if (typeof window !== "undefined") {
+  window.registerComponent("paragraph", Component);
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   Component
 });
-//# sourceMappingURL=title.js.map
+//# sourceMappingURL=paragraph.js.map

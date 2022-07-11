@@ -22,6 +22,26 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 
 // node_modules/media-typer/index.js
 var require_media_typer = __commonJS({
@@ -8735,11 +8755,11 @@ var require_mime_types = __commonJS({
       }
       return exts[0];
     }
-    function lookup(path) {
-      if (!path || typeof path !== "string") {
+    function lookup(path2) {
+      if (!path2 || typeof path2 !== "string") {
         return false;
       }
-      var extension2 = extname("x." + path).toLowerCase().substr(1);
+      var extension2 = extname("x." + path2).toLowerCase().substr(1);
       if (!extension2) {
         return false;
       }
@@ -9247,18 +9267,18 @@ var require_utils = __commonJS({
       if (decode)
         return decode(data, hint);
     }
-    function basename(path) {
-      if (typeof path !== "string")
+    function basename(path2) {
+      if (typeof path2 !== "string")
         return "";
-      for (let i = path.length - 1; i >= 0; --i) {
-        switch (path.charCodeAt(i)) {
+      for (let i = path2.length - 1; i >= 0; --i) {
+        switch (path2.charCodeAt(i)) {
           case 47:
           case 92:
-            path = path.slice(i + 1);
-            return path === ".." || path === "." ? "" : path;
+            path2 = path2.slice(i + 1);
+            return path2 === ".." || path2 === "." ? "" : path2;
         }
       }
-      return path === ".." || path === "." ? "" : path;
+      return path2 === ".." || path2 === "." ? "" : path2;
     }
     var TOKEN = [
       0,
@@ -13116,7 +13136,7 @@ var require_make_middleware = __commonJS({
 // node_modules/mkdirp/index.js
 var require_mkdirp = __commonJS({
   "node_modules/mkdirp/index.js"(exports, module2) {
-    var path = require("path");
+    var path2 = require("path");
     var fs2 = require("fs");
     var _0777 = parseInt("0777", 8);
     module2.exports = mkdirP.mkdirp = mkdirP.mkdirP = mkdirP;
@@ -13136,7 +13156,7 @@ var require_mkdirp = __commonJS({
         made = null;
       var cb = f || function() {
       };
-      p = path.resolve(p);
+      p = path2.resolve(p);
       xfs.mkdir(p, mode, function(er) {
         if (!er) {
           made = made || p;
@@ -13144,9 +13164,9 @@ var require_mkdirp = __commonJS({
         }
         switch (er.code) {
           case "ENOENT":
-            if (path.dirname(p) === p)
+            if (path2.dirname(p) === p)
               return cb(er);
-            mkdirP(path.dirname(p), opts, function(er2, made2) {
+            mkdirP(path2.dirname(p), opts, function(er2, made2) {
               if (er2)
                 cb(er2, made2);
               else
@@ -13175,14 +13195,14 @@ var require_mkdirp = __commonJS({
       }
       if (!made)
         made = null;
-      p = path.resolve(p);
+      p = path2.resolve(p);
       try {
         xfs.mkdirSync(p, mode);
         made = made || p;
       } catch (err0) {
         switch (err0.code) {
           case "ENOENT":
-            made = sync(path.dirname(p), opts, made);
+            made = sync(path2.dirname(p), opts, made);
             sync(p, opts, made);
             break;
           default:
@@ -13207,7 +13227,7 @@ var require_disk = __commonJS({
   "node_modules/multer/storage/disk.js"(exports, module2) {
     var fs2 = require("fs");
     var os = require("os");
-    var path = require("path");
+    var path2 = require("path");
     var crypto = require("crypto");
     var mkdirp = require_mkdirp();
     function getFilename(req, file, cb) {
@@ -13237,7 +13257,7 @@ var require_disk = __commonJS({
         that.getFilename(req, file, function(err2, filename) {
           if (err2)
             return cb(err2);
-          var finalPath = path.join(destination, filename);
+          var finalPath = path2.join(destination, filename);
           var outStream = fs2.createWriteStream(finalPath);
           file.stream.pipe(outStream);
           outStream.on("error", cb);
@@ -13253,11 +13273,11 @@ var require_disk = __commonJS({
       });
     };
     DiskStorage.prototype._removeFile = function _removeFile(req, file, cb) {
-      var path2 = file.path;
+      var path3 = file.path;
       delete file.destination;
       delete file.filename;
       delete file.path;
-      fs2.unlink(path2, cb);
+      fs2.unlink(path3, cb);
     };
     module2.exports = function(opts) {
       return new DiskStorage(opts);
@@ -16226,36 +16246,38 @@ module.exports = __toCommonJS(installHandler_exports);
 var import_multer = __toESM(require_multer());
 var import_fs = __toESM(require("fs"));
 var import_child_process = __toESM(require("child_process"));
+var import_path = __toESM(require("path"));
 var multerMiddleware = (0, import_multer.default)({ dest: "./uploads" });
 var middleware = multerMiddleware.single("attachment");
-var installHandler = (req, res) => {
+var installHandler = (req, res) => __async(void 0, null, function* () {
   var _a, _b, _c;
-  console.log(req.files);
-  console.log(req.file);
   const pluginsConfig = getPluginsConfig();
   const pluginName = (_a = req.query["pluginName"]) == null ? void 0 : _a.toString();
   if (((_b = req.file) == null ? void 0 : _b.path) && pluginName) {
     const finalName = `${req.file.path}.zip`;
-    import_fs.default.renameSync((_c = req.file) == null ? void 0 : _c.path, finalName);
-    console.log(`unzip ${finalName} -d ./uploads/${pluginName}/`);
+    yield import_fs.default.renameSync((_c = req.file) == null ? void 0 : _c.path, finalName);
     import_child_process.default.exec(`unzip ${finalName} -d ./uploads/${pluginName}/ && mv ./uploads/${pluginName}/build/* ./uploads/${pluginName}/ && rmdir ./uploads/${pluginName}/build`, (err) => {
       console.log(err);
+      if (!err) {
+        const pluginManifestFile = import_path.default.join(process.cwd(), `./uploads/${pluginName}/manifest.json`);
+        const pluginManifest = JSON.parse(import_fs.default.readFileSync(pluginManifestFile).toString());
+        pluginsConfig.plugins.push(pluginManifest);
+        import_fs.default.writeFileSync("./public/plugins.json", JSON.stringify(pluginsConfig));
+        res.sendStatus(204);
+        return;
+      } else {
+        res.sendStatus(500);
+      }
     });
-    pluginsConfig.plugins.push({
-      pluginName,
-      path: finalName
-    });
-    import_fs.default.writeFileSync("./public/plugins-config.json", JSON.stringify(pluginsConfig));
   } else {
     res.sendStatus(404);
     return;
   }
-  res.sendStatus(204);
-};
+});
 function getPluginsConfig() {
   let jsonConfig;
   try {
-    const f = import_fs.default.readFileSync("./public/plugins-config.json");
+    const f = import_fs.default.readFileSync("./public/plugins.json");
     const data = JSON.parse(f.toString());
     jsonConfig = data;
   } catch (e) {

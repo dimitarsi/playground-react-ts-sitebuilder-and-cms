@@ -8,18 +8,24 @@ fetch("/plugins.json")
       return (
         <>
           {plugins.map((p: { pluginName: string }) => {
-            // @ts-ignore
-            const Component = window.Components[p.pluginName] || null;
-            if (!Component) return null;
+            const plugin =
+              // @ts-ignore
+              window.Components.find(
+                (c: { plugin: string }) => c.plugin === p.pluginName
+              );
 
-            return <Component key={p.pluginName} />;
+            if (!plugin) return null;
+
+            console.log(plugin.Component);
+
+            return <plugin.Component key={p.pluginName} />;
           })}
         </>
       );
     };
 
     const app = document.getElementById("app");
-    console.log("Hydrating");
+
     if (app) {
       hydrateRoot(app, <Client />);
     }

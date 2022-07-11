@@ -1,9 +1,11 @@
 const ps = require("child_process");
 const esbuild = require("esbuild");
 const fs = require("fs");
+const path = require("path");
 
-const pluginFiles = process.argv.slice(3);
+const pluginFile = process.argv[3];
 const pluginName = process.argv[2];
+const pluginFileBaseName = path.basename(pluginFile, path.extname(pluginFile));
 
 async function build() {
   const buildBrowser = esbuild.build({
@@ -14,13 +16,13 @@ async function build() {
     format: "iife",
     sourceRoot: "./src",
     bundle: true,
-    entryPoints: pluginFiles,
+    entryPoints: [pluginFile],
     globalName: "Component",
     banner: {
       js: `{window.Components = window.Components || [];`,
     },
     footer: {
-      js: `window.Components.push({plugin: '${pluginName}', Component: Component})}`,
+      js: `window.Components.push({plugin: '${pluginName}', Component: Component.Component})}`,
     },
   });
 
@@ -32,13 +34,26 @@ async function build() {
     format: "cjs",
     sourceRoot: "./src",
     bundle: true,
-    entryPoints: pluginFiles,
+    entryPoints: [pluginFile],
   });
 
-  await Promise.all([buildBrowser, buildServer]);
+  const [browserBuild, serverBuild] = await Promise.all([
+    buildBrowser,
+    buildServer,
+  ]);
 
-  ps.exec("zip -rj build.zip ./build/*", () => {
-    fs.rmSync("./build", { recursive: true });
+  await fs.writeFileSync(
+    "./build/manifest.json",
+    JSON.stringify({
+      browserEntry: `./${pluginName}/browser/${pluginFileBaseName}.js`,
+      serverEntry: `./${pluginName}/node/${pluginFileBaseName}.js`,
+      pluginName: pluginName,
+    })
+  );
+
+  ps.exec("zip -r build.zip ./build/*", (er) => {
+    console.error(er);
+    // fs.rmSync("./build", { recursive: true });
   });
 }
 

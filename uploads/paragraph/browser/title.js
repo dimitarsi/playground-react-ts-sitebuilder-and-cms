@@ -35,16 +35,20 @@ var Component = (() => {
     Component: () => Component
   });
   var import_react = __toESM(__require("react"));
+
+  // src/components/clickHandler.ts
+  var clickHandler = () => {
+    console.log("another message");
+  };
+
+  // src/components/title.tsx
   var Component = () => {
-    const handleClick = () => {
-      console.log("Component hydrated succesfully");
-    };
     const title = "foobar";
     return /* @__PURE__ */ import_react.default.createElement("h1", {
-      onClick: handleClick
+      onClick: clickHandler
     }, title);
   };
   return __toCommonJS(title_exports);
 })();
-window.Components.push({plugin: 'title', Component: Component})}
+window.Components.push({plugin: 'title', Component: Component.Component})}
 //# sourceMappingURL=title.js.map

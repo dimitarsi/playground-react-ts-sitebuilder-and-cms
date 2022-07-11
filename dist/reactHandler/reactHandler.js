@@ -15779,32 +15779,26 @@ var import_path = __toESM(require("path"));
 var import_react = __toESM(require_react());
 var import_server = __toESM(require_server_node());
 var App = (props) => {
-  return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("h1", null, "Hello World"), /* @__PURE__ */ import_react.default.createElement("div", {
+  return /* @__PURE__ */ import_react.default.createElement("html", null, /* @__PURE__ */ import_react.default.createElement("head", null), /* @__PURE__ */ import_react.default.createElement("body", null, /* @__PURE__ */ import_react.default.createElement("h1", null, "Hello World"), /* @__PURE__ */ import_react.default.createElement("div", {
     id: "app"
   }, props.plugins.map((p) => {
-    const pluginPath = import_path.default.join(process.cwd(), p.path);
-    console.log(process.cwd());
-    console.log(`File Exists? ${pluginPath}`, import_fs.default.existsSync(pluginPath));
-    const Component = require(pluginPath).Component || require(pluginPath).Component3;
+    const pluginPath = import_path.default.join(process.cwd(), "./uploads", p.serverEntry);
+    const Component = require(pluginPath).Component;
     return /* @__PURE__ */ import_react.default.createElement(Component, {
       key: p.pluginName
     });
   })), /* @__PURE__ */ import_react.default.createElement("script", {
     src: "/browser.js"
   }), /* @__PURE__ */ import_react.default.createElement("script", {
-    dangerouslySetInnerHTML: {
-      __html: props.plugins.map((p) => {
-        return `registerScript('${p.pluginName}', '/${p.path}')`;
-      }).join("\n;")
-    }
+    src: "/plugins.js"
   }), /* @__PURE__ */ import_react.default.createElement("script", {
     src: "/client.js"
-  }));
+  })));
 };
 var reactHandler = (req, res) => {
   const pageConfig = import_fs.default.readFileSync("./public/page-config.json");
-  const { plugins } = JSON.parse(import_fs.default.readFileSync("./public/plugins-config.json").toString());
-  res.write("<!DOCTYPE html><head></head><body>");
+  const { plugins } = JSON.parse(import_fs.default.readFileSync("./public/plugins.json").toString());
+  res.write("<!DOCTYPE html>");
   (0, import_server.renderToPipeableStream)(/* @__PURE__ */ import_react.default.createElement(App, {
     json: pageConfig,
     plugins
