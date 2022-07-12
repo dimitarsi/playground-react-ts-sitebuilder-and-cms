@@ -1,1 +1,14 @@
-{"plugins":[{"browserEntry":"./paragraph/browser/paragraph.js","serverEntry":"./paragraph/node/paragraph.js","pluginName":"paragraph"}]}
+{
+  "plugins": [
+    {
+      "browserEntry": "./title/browser/title.js",
+      "serverEntry": "./title/node/title.js",
+      "pluginName": "title"
+    },
+    {
+      "browserEntry": "./par/browser/paragraph.js",
+      "serverEntry": "./par/node/paragraph.js",
+      "pluginName": "par"
+    }
+  ]
+}

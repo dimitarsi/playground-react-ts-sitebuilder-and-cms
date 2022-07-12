@@ -30,7 +30,4 @@ var import_react = __toESM(require("react"));
 var Component = () => {
   return /* @__PURE__ */ import_react.default.createElement("div", null, "Hello World");
 };
-if (typeof window !== "undefined") {
-  window.registerComponent("paragraph", Component);
-}
 //# sourceMappingURL=paragraph.js.map

@@ -1,13 +1,10 @@
 import { RequestHandler } from "express";
-import multer from "multer";
+import { getPluginsConfig } from "./helpers/getPluginsConfig";
+import path from "path";
 import fs from "fs";
 import ps from "child_process";
-import path from "path";
 
-const multerMiddleware = multer({ dest: "./uploads" });
-
-export const middleware = multerMiddleware.single("attachment");
-export const installHandler: RequestHandler = async (req, res) => {
+export const handler: RequestHandler = async (req, res) => {
   const pluginsConfig = getPluginsConfig();
   const pluginName = req.query["pluginName"]?.toString();
 
@@ -49,23 +46,3 @@ export const installHandler: RequestHandler = async (req, res) => {
     return;
   }
 };
-
-type PluginConfig = {
-  plugins: Array<{ pluginName: string; path: string }>;
-};
-
-function getPluginsConfig(): PluginConfig {
-  let jsonConfig: PluginConfig;
-  try {
-    const f = fs.readFileSync("./public/plugins.json");
-    const data = JSON.parse(f.toString());
-    jsonConfig = data as PluginConfig;
-  } catch (e) {
-    console.error("NO such file found");
-    jsonConfig = {
-      plugins: [],
-    };
-  } finally {
-    return jsonConfig!;
-  }
-}

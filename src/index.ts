@@ -1,13 +1,13 @@
 import express, { RequestHandler } from "express";
 import fs from "fs";
 import path from "path";
-import { installHandler, middleware } from "./installHandler/installHandler";
 import { reactHandler } from "./reactHandler/reactHandler";
 import compression from "compression";
 import session from "express-session";
 import { CmsApp } from "./modules/cms/cms";
 import { WebBuilderApp } from "./modules/web-builder/web-builder";
 import { PluginsApp } from "./modules/plugins/plugins";
+import { InstallerApp } from "./modules/installer/installer";
 
 const app = express();
 
@@ -46,7 +46,6 @@ const jsonPostHandler: RequestHandler = (req, res) => {
 
 app.post("/json", jsonPostHandler);
 app.get("/app", reactHandler);
-app.post("/install", middleware, installHandler);
 app.use("/uploads", express.static("./uploads", {}));
 
 app.use("/browser.js", (_, res) => {
@@ -96,6 +95,7 @@ app.get("/authorize", (req, res) => {
 CmsApp(app);
 WebBuilderApp(app);
 PluginsApp(app);
+InstallerApp(app);
 
 app.listen(process.env.PORT || "3000", () => {
   console.log("Starting app on");

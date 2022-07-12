@@ -2130,9 +2130,6 @@ var import_react = __toESM(require_react());
 var Component = () => {
   return /* @__PURE__ */ import_react.default.createElement("div", null, "Hello World");
 };
-if (typeof window !== "undefined") {
-  window.registerComponent("paragraph", Component);
-}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   Component
