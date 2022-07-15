@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild ./src/*.ts ./src/*.tsx ./src/**/*.tsx ./src/**/*.ts --platform=node --outdir=./dist --format=cjs --sourcemap --source-root=./src --bundle --external:esbuild",
+    "build": "esbuild ./src/*.ts ./src/*.tsx ./src/**/*.tsx ./src/**/*.ts --platform=node --outdir=./dist --format=cjs --sourcemap --source-root=../src --bundle --external:esbuild",
     "build:web": "esbuild ./src/client.tsx ./src/browser.ts --outdir=./dist --format=cjs --sourcemap --source-root=./src --bundle --minify",
     "build:components": "esbuild ./src/components/*.tsx --outdir=./dist/browser --format=cjs --sourcemap --source-root=./src --bundle --external:react --external:react-dom",
     "build:all": "yarn build && yarn build:web && yarn build:components",

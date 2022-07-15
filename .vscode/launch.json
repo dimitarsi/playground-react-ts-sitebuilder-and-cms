@@ -5,12 +5,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "pwa-node",
+      "command": "npm start",
+      "name": "Debug Server",
       "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/dist/index.js",
-      "outFiles": ["${workspaceFolder}/**/*.js"]
+      "type": "node-terminal"
     }
   ]
 }
