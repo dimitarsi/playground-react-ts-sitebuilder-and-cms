@@ -20,7 +20,7 @@ const maxAge = process.env.COOKIE_MAX_AGE
 const pluginsJsonPath = path.join(process.cwd(), "./public/plugins.json");
 
 app.use(compression());
-app.set("trust proxy", 1);
+
 app.use(
   session({
     name: "sesid",

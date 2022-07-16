@@ -1,5 +1,4 @@
 import { Application } from "express";
-import { restricted } from "../restricted";
 import { ServerHtmlStream } from "./Html";
 import express from "express";
 
