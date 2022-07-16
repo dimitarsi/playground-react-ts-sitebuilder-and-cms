@@ -8,7 +8,7 @@ export const App = () => {
   };
   return (
     <div>
-      Hello World <br />
+      Dimi <br />
       <Title />
       <button onClick={clickHandler}>Click me</button>
     </div>

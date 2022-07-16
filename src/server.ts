@@ -1,11 +1,10 @@
 import express, { RequestHandler } from "express";
 import fs from "fs";
 import path from "path";
-import { reactHandler } from "./reactHandler/reactHandler";
 import compression from "compression";
 import session from "express-session";
 import { CmsApp } from "./modules/cms/cms";
-import { WebBuilderApp } from "./modules/web-builder/web-builder";
+import { WebBuilderApp } from "./modules/webBuilder/web-builder";
 import { PluginsApp } from "./modules/plugins/plugins";
 import { InstallerApp } from "./modules/installer/installer";
 import { PublicApp } from "./modules/publicApp/publicApp";
@@ -46,7 +45,6 @@ const jsonPostHandler: RequestHandler = (req, res) => {
 };
 
 app.post("/json", jsonPostHandler);
-// app.get("/app", reactHandler);
 app.use("/uploads", express.static("./uploads", {}));
 app.use("/plugins.json", (_, res) => {
   res.sendFile(pluginsJsonPath);

@@ -9,7 +9,8 @@
     "build:components": "esbuild ./src/components/*.tsx --outdir=./dist/browser --format=cjs --sourcemap --source-root=./src --bundle --external:react --external:react-dom",
     "build:all": "yarn build && yarn build:web && yarn build:components",
     "start": "node ./dist/index.js",
-    "serve:web-builder": "esbuild ./src/modules/web-builder/components/app.tsx --outfile=app.js --bundle --serve=5555"
+    "build:web-builder": "esbuild ./src/modules/webBuilder/components/App.tsx --outdir=./dist/web-builder --format=cjs --sourcemap --source-root=../src --bundle --minify",
+    "serve:web-builder": "esbuild ./src/modules/webBuilder/components/App.tsx --outfile=app.js --bundle --serve=5555"
   },
   "author": "",
   "license": "ISC",
