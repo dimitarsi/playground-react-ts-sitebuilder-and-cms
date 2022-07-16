@@ -1,8 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/modules/restricted.ts"],
-  "sourceRoot": "../src",
-  "sourcesContent": ["import { RequestHandler } from \"express\";\n\nexport const restricted: RequestHandler = (req, res, next) => {\n  // @ts-ignore\n  if (!req.session.authorized) {\n    res.sendStatus(403);\n    return;\n  }\n  next();\n};\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEO,IAAM,aAA6B,CAAC,KAAK,KAAK,SAAS;AAE5D,MAAI,CAAC,IAAI,QAAQ,YAAY;AAC3B,QAAI,WAAW,GAAG;AAClB;AAAA,EACF;AACA,OAAK;AACP;",
-  "names": []
-}

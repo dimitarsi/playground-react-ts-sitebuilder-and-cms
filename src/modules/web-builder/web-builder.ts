@@ -7,26 +7,33 @@ import http from "http";
 const ESBUILD_PORT = parseFloat(process.env.SERVE_PORT || "5555");
 const ESBUILD_OUTFILE = "app.js";
 
+// function startEsbuildServe() {
+//   return esbuild.serve(
+//     {
+//       host: "localhost",
+//       port: ESBUILD_PORT,
+//     },
+//     {
+//       entryPoints: [
+//         path.join(
+//           process.cwd(),
+//           "./src/modules/web-builder/components/app.tsx"
+//         ),
+//       ],
+//       bundle: true,
+//       outfile: ESBUILD_OUTFILE,
+//       sourcemap: true,
+//       sourceRoot: path.join(process.cwd(), "./src"),
+//     }
+//   );
+// }
+
 export const WebBuilderApp = (app: Application) => {
   if (process.argv.includes("--dev")) {
-    esbuild.serve(
-      {
-        host: "localhost",
-        port: ESBUILD_PORT,
-      },
-      {
-        entryPoints: [
-          path.join(
-            process.cwd(),
-            "./src/modules/web-builder/components/app.tsx"
-          ),
-        ],
-        bundle: true,
-        outfile: ESBUILD_OUTFILE,
-        sourcemap: true,
-        sourceRoot: path.join(process.cwd(), "./src"),
-      }
-    );
+    // startEsbuildServe().catch(() => {
+    //   setTimeout(startEsbuildServe, 500);
+    // });
+
     // proxy the request
     app.get("/web-builder/app.js", async (_, proxyRes) => {
       http.get(`http://localhost:${ESBUILD_PORT}/${ESBUILD_OUTFILE}`, (res) => {

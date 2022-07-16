@@ -16,8 +16,6 @@ fetch("/plugins.json")
 
             if (!plugin) return null;
 
-            console.log(plugin.Component);
-
             return <plugin.Component key={p.pluginName} />;
           })}
         </>
