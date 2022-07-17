@@ -40,5 +40,5 @@ var Component = (() => {
   };
   return __toCommonJS(paragraph_exports);
 })();
-window.Components.push({plugin: 'par', Component: Component.Component})}
+window.Components.push({plugin: 'title', Component: Component.Component})}
 //# sourceMappingURL=paragraph.js.map

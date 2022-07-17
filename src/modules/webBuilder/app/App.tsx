@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useState } from "react";
 import { HistoryManager } from "./components/HistoryManager";
 import { PageManager } from "./components/PageManager";
 import { BuilderContextProvider } from "./context/BuilderContext";
+import { useComponentsFromRegistry } from "./context/componentsRegistry";
 import { useAddComponent } from "./context/hooks/useAddComponent";
 import { useGetComponents } from "./context/hooks/useGetComponents";
 import { useRemoveComponent } from "./context/hooks/useRemoveComponent";
@@ -46,7 +47,7 @@ function App() {
             <PageManager />
           </aside>
           <MainComponent>
-            <Component id="root" />
+            <Component id="root" type="root" />
           </MainComponent>
         </BuilderContextProvider>
       </div>
@@ -54,7 +55,9 @@ function App() {
   );
 }
 
-function Component({ id }: { id: string }) {
+function Component({ id, type }: { id: string; type: string }) {
+  const componentRegistry = useComponentsFromRegistry(type);
+
   return (
     <div style={{ padding: "0 0 0 10px", borderBottom: "1px solid gray" }}>
       <ComponentContent id={id} />
@@ -102,7 +105,7 @@ function ComponentChildren({ id }: { id: string }) {
   return (
     <div>
       {children.map((c) => (
-        <Component key={c.id} id={c.id} />
+        <Component key={c.id} id={c.id} type={c.type} />
       ))}
     </div>
   );

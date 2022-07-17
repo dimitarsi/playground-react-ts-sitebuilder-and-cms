@@ -1,1 +1,1 @@
-{"browserEntry":"./par/browser/paragraph.js","serverEntry":"./par/node/paragraph.js","pluginName":"par"}
+{"browserEntry":"./title/browser/title.js","serverEntry":"./title/node/title.js","pluginName":"title"}
