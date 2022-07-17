@@ -7,9 +7,7 @@ import { useAddComponent } from "./context/hooks/useAddComponent";
 import { useGetComponents } from "./context/hooks/useGetComponents";
 import { useRemoveComponent } from "./context/hooks/useRemoveComponent";
 import { useTotalComponentsCountForCurrentPage } from "./context/hooks/useTotalComponentsCountForCurrentPage";
-import { useUpdateComponent } from "./context/hooks/useUpdateComponent";
 import { generateNewId } from "./helpers/generateNewId";
-import { useThrottle } from "./hooks/useThrottle";
 
 class MainComponent extends React.Component<
   PropsWithChildren,
@@ -55,14 +53,40 @@ function App() {
   );
 }
 
-function Component({ id, type }: { id: string; type: string }) {
-  const componentRegistry = useComponentsFromRegistry(type);
+function Component({
+  id,
+  type,
+}: PropsWithChildren<{ id: string; type: string }>) {
+  const r = useComponentsFromRegistry(type);
+  const [state, setState] = useState<unknown>(undefined);
+  const saveState = (newState: unknown) => setState(newState);
+  const { current } = useGetComponents(id);
+
+  if (!r.BuilderComponent || !r.PublicComponent) {
+    return (
+      <div style={{ padding: "0 0 0 10px", borderBottom: "1px solid gray" }}>
+        <div className="error-boundary">Component of {type} not found.</div>
+        <ComponentToolbar id={id} />
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: "0 0 0 10px", borderBottom: "1px solid gray" }}>
-      <ComponentContent id={id} />
-      <ComponentChildren id={id} />
-      <ComponentToolbar id={id} />
+      <r.BuilderComponent
+        data={{ id, type }}
+        state={state}
+        onSaveState={saveState}
+      >
+        <r.PublicComponent
+          data={{ builder: true, ...current }}
+          state={state}
+          onSaveState={saveState}
+        >
+          <ComponentChildren id={id} />
+        </r.PublicComponent>
+        <ComponentToolbar id={id} />
+      </r.BuilderComponent>
     </div>
   );
 }
@@ -70,33 +94,6 @@ function Component({ id, type }: { id: string; type: string }) {
 function ComponentsCount() {
   const totalComponentsCount = useTotalComponentsCountForCurrentPage();
   return <div className="meta">Total Components: {totalComponentsCount}</div>;
-}
-
-function ComponentContent({ id }: { id: string }) {
-  const { current } = useGetComponents(id);
-  const [data] = useState(current.type === "component" ? current.text : "");
-  const throttle = useThrottle();
-  const onUpdateComponent = useUpdateComponent();
-
-  return (
-    <div
-      onInput={(e: React.FormEvent<HTMLDivElement>) => {
-        throttle(
-          () =>
-            onUpdateComponent({
-              ...current,
-              text: (e.target as HTMLDivElement).innerHTML || "",
-            }),
-          50
-        );
-      }}
-    >
-      <div
-        contentEditable={id !== "root"}
-        dangerouslySetInnerHTML={{ __html: data }}
-      />
-    </div>
-  );
 }
 
 function ComponentChildren({ id }: { id: string }) {
@@ -111,7 +108,7 @@ function ComponentChildren({ id }: { id: string }) {
   );
 }
 
-function ComponentToolbar({ id }: { id: string }) {
+function ComponentToolbar({ id, children }: PropsWithChildren<{ id: string }>) {
   const onAddComponent = useAddComponent();
   const onRemoveComponent = useRemoveComponent();
 
@@ -120,18 +117,21 @@ function ComponentToolbar({ id }: { id: string }) {
     onAddComponent({
       parent: id,
       id: newId,
-      text: prompt("Enter content text") || "undefined",
-      type: "component",
+      data: prompt("Enter content text") || "undefined",
+      type: "textBlock",
     });
   };
 
   const removeComponent = () => id !== "root" && onRemoveComponent(id);
 
   return (
-    <div>
-      <button onClick={() => addComponent()}>Add</button>
-      <button onClick={() => removeComponent()}>Remove</button>
-    </div>
+    <>
+      <div>
+        <button onClick={() => addComponent()}>Add</button>
+        <button onClick={() => removeComponent()}>Remove</button>
+      </div>
+      {children}
+    </>
   );
 }
 

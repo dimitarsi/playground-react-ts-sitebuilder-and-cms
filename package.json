@@ -8,7 +8,7 @@
     "build:web": "esbuild ./src/client/client.tsx ./src/client/browser.ts --outdir=./dist/client --format=cjs --sourcemap --source-root=../src --bundle --minify",
     "build:components": "esbuild ./src/components/*.tsx --outdir=./dist/browser --format=cjs --sourcemap --source-root=./src --bundle --external:react --external:react-dom",
     "build:all": "yarn build && yarn build:web && yarn build:components",
-    "start": "node ./dist/index.js",
+    "start": "node ./dist/server/server.js",
     "build:web-builder": "esbuild ./src/modules/webBuilder/app/index.tsx --outdir=./dist/web-builder --format=cjs --sourcemap --source-root=../src --bundle --minify",
     "serve:web-builder": "esbuild ./src/modules/webBuilder/components/App.tsx --outfile=app.js --bundle --serve=5555"
   },

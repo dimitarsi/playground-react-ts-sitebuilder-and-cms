@@ -12,8 +12,8 @@ export interface Page {
 export interface ComponentData {
   parent: string;
   id: string;
-  text: string;
-  type: "component" | "root";
+  data: any;
+  type: string;
 }
 
 export interface PageState {
