@@ -5,25 +5,36 @@ import React, {
   useContext,
   useState,
 } from "react";
-import { BuilderTextBlock } from "../blocks/standart/BuilderTextBlock";
-import { TextBlock } from "../blocks/standart/TextBlock";
+import { BuilderRootBlock } from "../blocks/standart/Root/BuilderRootBlock";
+import { BuilderTextBlock } from "../blocks/standart/TextBlock/BuilderTextBlock";
+import { TextBlock } from "../blocks/standart/TextBlock/TextBlock";
 
-type BockC<S = any, D = any> = React.ComponentType<
-  PropsWithChildren<{
-    data: D;
-    state: S;
-    onSaveState: (state: S) => void;
-    builder?: boolean;
-  }>
+type BlockCBase<T extends {}, S = any, D = any> = React.ComponentType<
+  PropsWithChildren<
+    {
+      data: D;
+      state: S;
+      onSaveState: (state: S) => void;
+      builder?: boolean;
+    } & T
+  >
 >;
+type BlockC = BlockCBase<{}>;
+
+type BuilderBlockC = BlockCBase<{
+  builderTypes: string[];
+  PublicComponent?: React.ReactNode;
+  Toolbar?: React.ReactNode;
+  onCreateBlock: (filteredTypes: string[]) => void;
+}>;
 
 interface ComponentRegistry {
-  publicComponents: Record<string, BockC>;
-  builderComponents: Record<string, BockC>;
+  publicComponents: Record<string, BlockC>;
+  builderComponents: Record<string, BuilderBlockC>;
   addComponent: (
     type: string,
-    PublicComponent: BockC,
-    builderComponents: BockC
+    publicComponent: BlockC,
+    builderComponents: BuilderBlockC
   ) => void;
 }
 
@@ -37,7 +48,7 @@ const publicStandard = {
   textBlock: TextBlock,
 };
 const builderStandard = {
-  root: RootComponent,
+  root: BuilderRootBlock,
   textBlock: BuilderTextBlock,
 };
 
@@ -45,9 +56,9 @@ export const ComponentRegistryProvider: FC<
   PropsWithChildren & { plugins: PluginJSONData }
 > = ({ children }) => {
   const [publicComponents, setPublicComponents] =
-    useState<Record<string, BockC>>(publicStandard);
+    useState<Record<string, BlockC>>(publicStandard);
   const [builderComponents, setBuilderComponents] =
-    useState<Record<string, BockC>>(builderStandard);
+    useState<Record<string, BuilderBlockC>>(builderStandard);
 
   return (
     <componentsRegistryContext.Provider
@@ -81,4 +92,13 @@ export const useComponentsFromRegistry = (type: string) => {
     PublicComponent: ctx.publicComponents[type],
     BuilderComponent: ctx.builderComponents[type],
   };
+};
+
+export const useBuilderTypes = () => {
+  const ctx = useContext(componentsRegistryContext);
+  if (!ctx) {
+    throw "Component Registry is misssing";
+  }
+
+  return Object.keys(ctx.builderComponents);
 };
