@@ -2,8 +2,14 @@ import { useRef } from "react";
 
 export const useThrottle = () => {
   const r = useRef<number>(-1);
+  const m = useRef<CallableFunction>();
   return (method: Function, delay: number) => {
-    clearTimeout(r.current);
-    r.current = window?.setTimeout(() => method(), delay);
+    if (r.current == -1) {
+      r.current = window?.setTimeout(() => {
+        m.current?.();
+        r.current = -1;
+      }, delay);
+    }
+    m.current = method;
   };
 };

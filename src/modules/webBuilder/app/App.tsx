@@ -90,7 +90,7 @@ function Component({
   return (
     <div style={{ padding: "0 0 0 10px", borderBottom: "1px solid gray" }}>
       <r.BuilderComponent
-        data={{ id, type }}
+        data={current}
         builderTypes={builderTypes}
         PublicComponent={r.PublicComponent}
         PublicComponentChildren={ComponentChildren}
@@ -111,7 +111,7 @@ function ComponentChildren({ id }: { id: string }) {
   return (
     <>
       {children.map((c) => (
-        <Component key={c.id} id={c.id} type={c.type} />
+        <Component key={c.id} {...c} />
       ))}
     </>
   );

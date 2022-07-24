@@ -1,5 +1,4 @@
-import React, { PropsWithChildren, ReactNode, useRef, useState } from "react";
-import { useGetComponents } from "../../../context/hooks/useGetComponents";
+import React, { ReactNode, useMemo, useRef, useState } from "react";
 import { useUpdateComponent } from "../../../context/hooks/useUpdateComponent";
 import { useThrottle } from "../../../hooks/useThrottle";
 import { BuilderProps } from "../../types";
@@ -11,10 +10,12 @@ function getPublicComponentProps({
   data,
   id,
   type,
+  parent,
 }: Data & { data: Data["data"] | undefined }) {
   return {
     id,
     type,
+    parent,
     data: data || DEFAULT_DATA,
   };
 }
@@ -26,7 +27,6 @@ export const BuilderTextBlock = ({
   Footer,
 }: BuilderProps<Data>) => {
   const throttle = useThrottle();
-  const { current } = useGetComponents(data.id);
   const onUpdateComponent = useUpdateComponent();
   const blockRef = useRef<HTMLParagraphElement | null>(null);
   const [editLabel, setEditLabel] = useState("Edit");
@@ -36,15 +36,39 @@ export const BuilderTextBlock = ({
       return;
     }
 
-    if (blockRef.current.contentEditable === "false") {
-      blockRef.current.contentEditable = "true";
-      setEditLabel("Cancel");
+    if (blockRef.current.contentEditable === "true") {
+      blockRef.current.contentEditable = "false";
+      setEditLabel("Edit");
       return;
     }
 
-    blockRef.current.contentEditable = "false";
-    setEditLabel("Edit");
+    blockRef.current.contentEditable = "true";
+    setEditLabel("Cancel");
   };
+  /**
+   * Preserve the cursor position.
+   * Without this the component gets rerendered and the cursor jumps back to the
+   * begining after each stroke.
+   */
+  const contentsRef = useRef<ReactNode | null>(null);
+
+  const contents = useMemo(() => {
+    return (
+      <PublicComponent {...getPublicComponentProps(data)} ref={blockRef}>
+        <PublicComponentChildren id={data.id} />
+      </PublicComponent>
+    );
+  }, [data.data, data.parent]);
+
+  /**
+   * Only render the new instance if the innerHTML is different from what we have in the
+   * component data.
+   * This allows us to listen for changes on the outside, in case we implement an "Edit Panel" to
+   * modify component properties.
+   */
+  if (!contentsRef || data.data !== blockRef.current?.innerHTML) {
+    contentsRef.current = contents;
+  }
 
   return (
     <>
@@ -56,16 +80,16 @@ export const BuilderTextBlock = ({
           throttle(
             () =>
               onUpdateComponent({
-                ...current,
+                parent: data.parent,
+                id: data.id,
+                type: data.type,
                 data: (e.target as HTMLDivElement).innerHTML || "",
               }),
-            50
+            300
           );
         }}
       >
-        <PublicComponent {...getPublicComponentProps(data)} ref={blockRef}>
-          <PublicComponentChildren id={data.id} />
-        </PublicComponent>
+        {contentsRef.current}
         <Footer builderTypes={[]} id={data.id} />
       </div>
     </>
