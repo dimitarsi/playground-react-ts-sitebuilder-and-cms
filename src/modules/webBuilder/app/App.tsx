@@ -1,4 +1,4 @@
-import React, { memo, PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren, useMemo, useState } from "react";
 import { HistoryManager } from "./components/HistoryManager";
 import { ListAllowedBlockTypes } from "./components/ListAllowedBlockTypes";
 import { PageManager } from "./components/PageManager";
@@ -6,7 +6,7 @@ import { BuilderContextProvider } from "./context/BuilderContext";
 import {
   useBuilderTypes,
   useComponentsFromRegistry,
-} from "./context/componentsRegistry";
+} from "./context/ComponentsRegistry";
 import { useAddComponent } from "./context/hooks/useAddComponent";
 import { useGetComponents } from "./context/hooks/useGetComponents";
 import { useRemoveComponent } from "./context/hooks/useRemoveComponent";
@@ -52,14 +52,7 @@ function App() {
             <PageManager />
           </aside>
           <MainComponent>
-            <Component
-              id="root"
-              type="root"
-              onCreateBlocksWithTypes={(types: string[], parentId: string) => {
-                setBlockTypes(types);
-                setParentId(parentId);
-              }}
-            />
+            <Component id="root" type="root" />
           </MainComponent>
           {createBlockState && (
             <ListAllowedBlockTypes
@@ -77,26 +70,19 @@ function App() {
 function Component({
   id,
   type,
-  onCreateBlocksWithTypes,
 }: PropsWithChildren<{
   id: string;
   type: string;
-  onCreateBlocksWithTypes: (
-    filteredBuilderBlockTypes: string[],
-    parentId: string
-  ) => void;
 }>) {
   const r = useComponentsFromRegistry(type);
   const builderTypes = useBuilderTypes();
-  const [state, setState] = useState<unknown>(undefined);
-  const saveState = (newState: unknown) => setState(newState);
   const { current } = useGetComponents(id);
 
   if (!r.BuilderComponent || !r.PublicComponent) {
     return (
       <div style={{ padding: "0 0 0 10px", borderBottom: "1px solid gray" }}>
         <div className="error-boundary">Component of {type} not found.</div>
-        <ComponentToolbar id={id} removeOnly />
+        <ComponentToolbar id={id} />
       </div>
     );
   }
@@ -105,22 +91,10 @@ function Component({
     <div style={{ padding: "0 0 0 10px", borderBottom: "1px solid gray" }}>
       <r.BuilderComponent
         data={{ id, type }}
-        state={state}
-        onSaveState={saveState}
         builderTypes={builderTypes}
         PublicComponent={r.PublicComponent}
-        PublicComponentChildre={ComponentChildren}
-        // () => <r.PublicComponent
-        //   data={{ builder: true, ...current }}
-        //   state={state}
-        //   onSaveState={saveState}
-        // >
-        //   <ComponentChildren
-        //     id={id}
-        //     onCreateBlock={onCreateBlocksWithTypes}
-        //   />
-        // </r.PublicComponent>
-        Toolbar={ComponentToolbar}
+        PublicComponentChildren={ComponentChildren}
+        Footer={ComponentToolbar}
       />
     </div>
   );
@@ -131,59 +105,82 @@ function ComponentsCount() {
   return <div className="meta">Total Components: {totalComponentsCount}</div>;
 }
 
-function ComponentChildren({
-  id,
-  onCreateBlock,
-}: {
-  id: string;
-  onCreateBlock: (
-    filteredBuilderBlockTypes: string[],
-    parentId: string
-  ) => void;
-}) {
+function ComponentChildren({ id }: { id: string }) {
   const { children } = useGetComponents(id);
 
   return (
-    <div>
+    <>
       {children.map((c) => (
-        <Component
-          key={c.id}
-          id={c.id}
-          type={c.type}
-          onCreateBlocksWithTypes={onCreateBlock}
-        />
+        <Component key={c.id} id={c.id} type={c.type} />
       ))}
-    </div>
+    </>
   );
 }
 
-function ComponentToolbar({
-  id,
-  children,
-  removeOnly,
-}: PropsWithChildren<{ id: string; removeOnly?: boolean }>) {
+type ToolbarProps = {
+  id: string;
+  builderTypes?: string[];
+};
+
+function ComponentToolbar({ id, builderTypes }: ToolbarProps) {
   const onAddComponent = useAddComponent();
   const onRemoveComponent = useRemoveComponent();
+  const [show, setShow] = useState(false);
+  const allowedBuilderTypes = useMemo(() => {
+    return (builderTypes || []).filter((bt) => bt !== "root");
+  }, [builderTypes]);
 
-  const addComponent = () => {
+  const addComponent = (buildType: string) => {
     const newId = generateNewId();
     onAddComponent({
       parent: id,
       id: newId,
-      data: prompt("Enter content text") || "undefined",
-      type: "textBlock",
+      data: undefined,
+      type: buildType,
     });
+    setShow(false);
+  };
+
+  const showBuildOptions = () => {
+    setShow(true);
   };
 
   const removeComponent = () => id !== "root" && onRemoveComponent(id);
 
+  const buildOptions = useMemo(
+    () =>
+      allowedBuilderTypes.map((bt) => {
+        return (
+          <span
+            style={{}}
+            key={bt}
+            onClick={() => {
+              addComponent(bt);
+            }}
+          >
+            {bt}
+          </span>
+        );
+      }),
+    [allowedBuilderTypes]
+  );
+
   return (
     <>
       <div>
-        {!removeOnly && <button onClick={() => addComponent()}>Add</button>}
-        <button onClick={() => removeComponent()}>Remove</button>
+        {Boolean(builderTypes?.length) && (
+          <button onClick={showBuildOptions}>Add</button>
+        )}
+        <>{show && buildOptions}</>
+        <button
+          onClick={() => {
+            removeComponent();
+            setShow(false);
+          }}
+        >
+          Remove
+        </button>
       </div>
-      {children}
     </>
   );
 }

@@ -1,16 +1,19 @@
-import React, { PropsWithChildren } from "react";
+import React from "react";
+import { BuilderProps } from "../../types";
 
-export const BuilderRootBlock = (
-  props: PropsWithChildren<{
-    PublicComponent: React.ReactNode;
-    Footer: React.ReactNode;
-    builderTypes: string[];
-  }>
-) => {
+export const BuilderRootBlock = ({
+  PublicComponent,
+  PublicComponentChildren,
+  Footer,
+  data,
+  builderTypes,
+}: BuilderProps<{ id: string }>) => {
   return (
     <div>
-      {props.PublicComponent}
-      {props.Footer}
+      <PublicComponent {...data}>
+        <PublicComponentChildren id={data.id} />
+      </PublicComponent>
+      <Footer id={data.id} builderTypes={builderTypes} />
     </div>
   );
 };

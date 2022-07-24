@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { ComponentRegistryProvider } from "./context/componentsRegistry";
+import { ComponentRegistryProvider } from "./context/ComponentsRegistry";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

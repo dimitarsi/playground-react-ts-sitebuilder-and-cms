@@ -1,13 +1,26 @@
-import React, { PropsWithChildren, ReactNode, useRef } from "react";
+import React, { PropsWithChildren, ReactNode, useRef, useState } from "react";
 import { useGetComponents } from "../../../context/hooks/useGetComponents";
 import { useUpdateComponent } from "../../../context/hooks/useUpdateComponent";
 import { useThrottle } from "../../../hooks/useThrottle";
 import { BuilderProps } from "../../types";
 import { Data } from "./types";
 
+const DEFAULT_DATA = "Text";
+
+function getPublicComponentProps({
+  data,
+  id,
+  type,
+}: Data & { data: Data["data"] | undefined }) {
+  return {
+    id,
+    type,
+    data: data || DEFAULT_DATA,
+  };
+}
+
 export const BuilderTextBlock = ({
   data,
-  builderTypes,
   PublicComponent,
   PublicComponentChildren,
   Footer,
@@ -16,8 +29,8 @@ export const BuilderTextBlock = ({
   const { current } = useGetComponents(data.id);
   const onUpdateComponent = useUpdateComponent();
   const blockRef = useRef<HTMLParagraphElement | null>(null);
+  const [editLabel, setEditLabel] = useState("Edit");
 
-  const filteredBuilderTypes = builderTypes.filter((bt) => bt !== "root");
   const handleEdit = () => {
     if (!blockRef.current) {
       return;
@@ -25,20 +38,18 @@ export const BuilderTextBlock = ({
 
     if (blockRef.current.contentEditable === "false") {
       blockRef.current.contentEditable = "true";
+      setEditLabel("Cancel");
       return;
     }
 
     blockRef.current.contentEditable = "false";
+    setEditLabel("Edit");
   };
-
-  const editOrCancelLabel = blockRef.current?.contentEditable
-    ? "Cancel"
-    : "Edit";
 
   return (
     <>
       <div>
-        <button onClick={handleEdit}>{editOrCancelLabel}</button>
+        <button onClick={handleEdit}>{editLabel}</button>
       </div>
       <div
         onInput={(e: React.FormEvent<HTMLDivElement>) => {
@@ -52,10 +63,10 @@ export const BuilderTextBlock = ({
           );
         }}
       >
-        <PublicComponent {...data} ref={blockRef}>
+        <PublicComponent {...getPublicComponentProps(data)} ref={blockRef}>
           <PublicComponentChildren id={data.id} />
         </PublicComponent>
-        <Footer builderTypes={filteredBuilderTypes} id={data.id} />
+        <Footer builderTypes={[]} id={data.id} />
       </div>
     </>
   );
