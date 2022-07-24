@@ -1,8 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/components/title.tsx", "../../src/components/clickHandler.ts"],
-  "sourceRoot": "./src",
-  "sourcesContent": ["import React from \"react\";\nimport { clickHandler } from \"./clickHandler\";\n\nexport const Component = () => {\n  const title = \"foobar\";\n\n  return <h1 onClick={clickHandler}>{title}</h1>;\n};\n", "export const clickHandler = () => {\n  console.log(\"another message\");\n};\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA,qBAAkB;;;ACAX,MAAM,eAAe,MAAM;AAChC,YAAQ,IAAI,iBAAiB;AAAA,EAC/B;;;ADCO,MAAM,YAAY,MAAM;AAC7B,UAAM,QAAQ;AAEd,WAAO,mDAAC;AAAA,MAAG,SAAS;AAAA,OAAe,KAAM;AAAA,EAC3C;",
-  "names": []
-}

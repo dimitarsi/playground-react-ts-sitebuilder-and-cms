@@ -1,5 +1,0 @@
-{
-  "pluginName": "title",
-  "publicComponent": "./src/components/title.tsx",
-  "builderComponent": "./src/components/paragraph.tsx"
-}

@@ -1,0 +1,21 @@
+{
+  "pluginName": "Headings Plugin",
+  "shortName": "headings",
+  "group": "typography",
+  "pluginIcon": [{ "size": "32x32", "src": "./src/components/heading.svg" }],
+  "publicComponent": [
+    {
+      "src": "./src/components/H1HeadingBlock.tsx",
+      "name": "h1",
+      "componentIcon": [
+        { "size": "32x32", "src": "./src/components/heading-h1-32x32.svg" },
+        { "size": "64x64", "src": "./src/components/heading-h1-64x64.svg" }
+      ]
+    },
+    {
+      "src": "./src/components/H2HeadingBlock.tsx",
+      "name": "h2"
+    }
+  ],
+  "builderComponent": "./src/components/HeadingsBuilder.tsx"
+}

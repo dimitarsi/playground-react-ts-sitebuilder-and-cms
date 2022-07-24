@@ -10,7 +10,8 @@
     "build:all": "yarn build && yarn build:web && yarn build:components",
     "start": "node ./dist/server/server.js",
     "build:web-builder": "esbuild ./src/modules/webBuilder/app/index.tsx --outdir=./dist/web-builder --format=cjs --sourcemap --source-root=../src --bundle",
-    "serve:web-builder": "esbuild ./src/modules/webBuilder/components/App.tsx --outfile=app.js --bundle --serve=5555"
+    "serve:web-builder": "esbuild ./src/modules/webBuilder/components/App.tsx --outfile=app.js --bundle --serve=5555",
+    "scripts:compile": "ts-node ./scripts/build-components.ts"
   },
   "author": "",
   "license": "ISC",
@@ -32,6 +33,7 @@
     "esbuild": "^0.14.48",
     "nodemon": "^2.0.19",
     "prettier": "^2.7.1",
+    "ts-node": "^10.9.1",
     "typescript": "^4.7.4"
   }
 }
