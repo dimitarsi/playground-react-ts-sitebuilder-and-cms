@@ -1,8 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/components/HeadingsBuilder.tsx"],
-  "sourceRoot": "./src",
-  "sourcesContent": ["import React from \"react\";\nimport data from \"./HeadingsPlugin.json\";\n\nexport const HeadingsBuilder = () => {\n  return <div>Builder</div>;\n};\n\nexport const type = data.shortName;\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,qBAAkB;;;;;;;;;;;;;;;;;;;;;;;;;;AAGX,MAAM,kBAAkB,MAAM;AACnC,WAAO,mDAAC,aAAI,SAAO;AAAA,EACrB;AAEO,MAAM,OAAO,uBAAK;",
-  "names": []
-}

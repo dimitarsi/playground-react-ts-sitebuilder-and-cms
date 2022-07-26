@@ -1,8 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/components/H1HeadingBlock.tsx", "../../src/components/Wrapper.tsx"],
-  "sourceRoot": "./src",
-  "sourcesContent": ["import React, { FC, PropsWithChildren } from \"react\";\nimport { HeadingType } from \"./types\";\nimport { Wrapper } from \"./Wrapper\";\n\nexport const Component: FC<PropsWithChildren> = ({ children }) => {\n  return (\n    <Wrapper>\n      <h1>{children}</h1>\n    </Wrapper>\n  );\n};\n\nexport const type: HeadingType = \"heading-h1\";\n", "import React, { PropsWithChildren } from \"react\";\n\nexport const Wrapper = ({ children }: PropsWithChildren) => {\n  return <div>{children}</div>;\n};\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,oBAA6C;;;ACA7C,mBAAyC;AAElC,IAAM,UAAU,CAAC,EAAE,eAAkC;AAC1D,SAAO,mDAAC,aAAK,QAAS;AACxB;;;ADAO,IAAM,YAAmC,CAAC,EAAE,eAAe;AAChE,SACE,oDAAC,eACC,oDAAC,YAAI,QAAS,CAChB;AAEJ;AAEO,IAAM,OAAoB;",
-  "names": []
-}

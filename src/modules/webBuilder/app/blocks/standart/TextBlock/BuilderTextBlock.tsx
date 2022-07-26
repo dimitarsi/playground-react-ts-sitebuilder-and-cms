@@ -66,7 +66,7 @@ export const BuilderTextBlock = ({
    * This allows us to listen for changes on the outside, in case we implement an "Edit Panel" to
    * modify component properties.
    */
-  if (!contentsRef || data.data !== blockRef.current?.innerHTML) {
+  if (!contentsRef.current || data.data !== blockRef.current?.innerHTML) {
     contentsRef.current = contents;
   }
 
