@@ -119,7 +119,6 @@ async function build() {
   const config = readFromConfig();
   const { pluginName, builderComponent, publicComponent } = config;
   const components = resolvePublic(publicComponent);
-  const publicComponents = components.map(({ src }) => src);
   const buildBrowser: Array<Promise<esbuild.BuildResult>> = [
     buildClient(
       {
@@ -167,10 +166,10 @@ async function build() {
 
   await fs.writeFileSync("./build/manifest.json", JSON.stringify(manifest));
 
-  // ps.exec(`zip -r ${pluginName}.zip ./build/*`, (er: any) => {
-  //   console.error(er);
-  //   // fs.rmSync("./build", { recursive: true });
-  // });
+  ps.exec(`zip -r ${config.pluginName}.zip ./build/*`, (er: any) => {
+    console.error(er);
+    // fs.rmSync("./build", { recursive: true });
+  });
 }
 
 build();

@@ -1,48 +1,106 @@
-import { RequestHandler } from "express";
-import { getPluginsConfig } from "./helpers/getPluginsConfig";
-import path from "path";
 import fs from "fs";
 import ps from "child_process";
+import path from "path";
+import { RequestHandler } from "express";
+import { getPluginDir, PLUGINS_PATH } from "../constants";
+import { ManifestData } from "../../plugin.types";
+import { PLUGINS_CONFIG_PATH } from "../constants";
 
 export const handler: RequestHandler = async (req, res) => {
-  const pluginsConfig = getPluginsConfig();
-  const pluginName = req.query["pluginName"]?.toString();
+  if (req.file?.path) {
+    // TODO: Add parameter support for overwrite
+    // if (fs.existsSync(`./${PLUGINS_DIR}/${pluginName}/`)) {
+    //   fs.rmSync(`./${PLUGINS_DIR}/${pluginName}`, {
+    //     recursive: true,
+    //   });
+    // }
 
-  if (req.file?.path && pluginName) {
-    const finalName = `${req.file.path}.zip`;
+    const uploadFile = req.file.path;
+    const pluginName = path
+      .basename(req.file.originalname, path.extname(req.file.originalname))
+      .toLocaleLowerCase()
+      .replace(/[\. ]/, "-");
 
-    await fs.renameSync(req.file?.path, finalName);
-    ps.exec(
-      `unzip ${finalName} -d ./uploads/${pluginName}/ && mv ./uploads/${pluginName}/build/* ./uploads/${pluginName}/ && rmdir ./uploads/${pluginName}/build`,
-      (err) => {
-        console.log(err);
+    const targetDir = getPluginDir(pluginName);
+    const moveFrom = `${targetDir}/build/*`;
+    const moveTo = targetDir;
+    const buildDirFromZip = `${targetDir}/build`;
 
-        if (!err) {
-          const pluginManifestFile = path.join(
-            process.cwd(),
-            `./uploads/${pluginName}/manifest.json`
-          );
+    ps.exec(`unzip ${uploadFile} -d ${targetDir}`, async (err) => {
+      console.log(err);
+      if (!err) {
+        await normalizePluginStructure({
+          moveFrom,
+          moveTo,
+          buildDirFromZip,
+        });
 
-          const pluginManifest = JSON.parse(
-            fs.readFileSync(pluginManifestFile).toString()
-          );
-
-          pluginsConfig.plugins.push(pluginManifest);
-
-          fs.writeFileSync(
-            "./public/plugins.json",
-            JSON.stringify(pluginsConfig)
-          );
-
-          res.sendStatus(204);
-          return;
+        const writeSuccessful = appendManifestToConfig(pluginName);
+        if (writeSuccessful) {
+          res.redirect(302, "/install-success");
         } else {
-          res.sendStatus(500);
+          res.redirect(302, "/install-fail");
         }
+      } else {
+        res.sendStatus(500);
       }
-    );
+    });
   } else {
     res.sendStatus(404);
     return;
   }
 };
+
+function normalizePluginStructure({
+  moveFrom,
+  moveTo,
+  buildDirFromZip,
+}: {
+  moveFrom: string;
+  moveTo: string;
+  buildDirFromZip: string;
+}) {
+  return new Promise((res, reject) => {
+    if (fs.existsSync(buildDirFromZip)) {
+      ps.exec(`mv ${moveFrom} ${moveTo} && rmdir ${buildDirFromZip}`, (err) => {
+        if (err) {
+          console.error(err);
+          reject();
+        }
+        res(true);
+      });
+    } else {
+      res(true);
+    }
+  });
+}
+
+function appendManifestToConfig(pluginName: string) {
+  let pluginConfig = {
+    plugins: {},
+  };
+  try {
+    const config = fs.readFileSync(PLUGINS_CONFIG_PATH).toString();
+    pluginConfig = JSON.parse(config);
+  } catch (err) {
+    console.log("Error getting config info. Fallback to empty config");
+  }
+
+  const pluginManifest: ManifestData = JSON.parse(
+    fs
+      .readFileSync(path.join(PLUGINS_PATH, pluginName, "./manifest.json"))
+      .toString()
+  );
+
+  // @ts-ignore
+  if (pluginConfig.plugins[pluginName]) {
+    return false;
+  }
+
+  // @ts-ignore
+  pluginConfig.plugins[pluginName] = pluginManifest;
+
+  fs.writeFileSync(PLUGINS_CONFIG_PATH, JSON.stringify(pluginConfig));
+
+  return true;
+}

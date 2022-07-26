@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Install Plugin</title>
+  </head>
+  <body>
+    <form
+      action="/install"
+      enctype="multipart/form-data"
+      onsubmit="install(event)"
+      method="post"
+      id="install-form"
+    >
+      <input type="file" name="attachment" /><br />
+      <input type="text" name="pluginName" /><br />
+      <button>Install</button>
+    </form>
+    <script>
+      function install(event) {
+        const pluginNameField = document.getElementsByName("pluginName")[0];
+        const f = document.getElementById("install-form");
+        if (!pluginNameField.value) {
+          event.preventDefault();
+        }
+        f.action = `/install?pluginName=${pluginNameField.value}`;
+      }
+    </script>
+  </body>
+</html>

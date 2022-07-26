@@ -1,6 +1,6 @@
 {
-  "pluginName": "Headings Plugin",
-  "shortName": "headings",
+  "pluginName": "Titles Plugin",
+  "shortName": "titles",
   "group": "typography",
   "pluginIcon": [{ "size": "32x32", "src": "./src/components/heading.svg" }],
   "publicComponent": [

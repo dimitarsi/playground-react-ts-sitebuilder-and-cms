@@ -46,9 +46,6 @@ const jsonPostHandler: RequestHandler = (req, res) => {
 
 app.post("/json", jsonPostHandler);
 app.use("/uploads", express.static("./uploads", {}));
-app.use("/plugins.json", (_, res) => {
-  res.sendFile(pluginsJsonPath);
-});
 
 app.use("/plugins.js", (_, res) => {
   const { plugins } = JSON.parse(fs.readFileSync(pluginsJsonPath).toString());

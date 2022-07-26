@@ -1,0 +1,1 @@
+{"browserEntries":{"titles-h1":"./browser/titles-h1.js","titles-h2":"./browser/titles-h2.js","titles-builder":"./browser/titles-builder.js"},"serverEntries":{"titles-h1":"./node/titles-h1.js","titles-h2":"./node/titles-h2.js"},"pluginName":"Titles Plugin","shortName":"titles","version":"1.0.0"}

@@ -1,0 +1,1 @@
+{"browserEntries":{"headings-h1":"./browser/headings-h1.js","headings-h2":"./browser/headings-h2.js","headings-builder":"./browser/headings-builder.js"},"serverEntries":{"headings-h1":"./node/headings-h1.js","headings-h2":"./node/headings-h2.js"},"pluginName":"Headings Plugin","shortName":"headings","version":"1.0.0"}

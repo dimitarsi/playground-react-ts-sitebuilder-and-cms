@@ -1,0 +1,32 @@
+{
+  "plugins": {
+    "headings": {
+      "browserEntries": {
+        "headings-h1": "./browser/headings-h1.js",
+        "headings-h2": "./browser/headings-h2.js",
+        "headings-builder": "./browser/headings-builder.js"
+      },
+      "serverEntries": {
+        "headings-h1": "./node/headings-h1.js",
+        "headings-h2": "./node/headings-h2.js"
+      },
+      "pluginName": "Headings Plugin",
+      "shortName": "headings",
+      "version": "1.0.0"
+    },
+    "titles": {
+      "browserEntries": {
+        "titles-h1": "./browser/titles-h1.js",
+        "titles-h2": "./browser/titles-h2.js",
+        "titles-builder": "./browser/titles-builder.js"
+      },
+      "serverEntries": {
+        "titles-h1": "./node/titles-h1.js",
+        "titles-h2": "./node/titles-h2.js"
+      },
+      "pluginName": "Titles Plugin",
+      "shortName": "titles",
+      "version": "1.0.0"
+    }
+  }
+}
