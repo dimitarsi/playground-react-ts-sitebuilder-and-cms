@@ -1,5 +1,3 @@
-import React, { PropsWithChildren } from "react";
+import React from "react";
 
-export const RootBlock = (props: PropsWithChildren) => (
-  <React.Fragment>{props.children}</React.Fragment>
-);
+export const RootBlock = React.Fragment;

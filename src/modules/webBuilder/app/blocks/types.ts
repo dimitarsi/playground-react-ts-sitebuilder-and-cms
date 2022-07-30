@@ -5,9 +5,14 @@ import {
   RefAttributes,
 } from "react";
 
+export type BuilderFooter = React.ComponentType<{
+  allowedPublicTypes: string[];
+  id: string;
+}>;
+
 export interface BuilderProps<D> {
   data: D;
-  builderTypes: string[];
+  allPublicTypes: string[];
   PublicComponent:
     | ComponentType<D>
     | React.ForwardRefExoticComponent<
@@ -16,8 +21,5 @@ export interface BuilderProps<D> {
   PublicComponentChildren: React.ComponentType<
     PropsWithChildren<{ id: string }>
   >;
-  Footer: React.ComponentType<{
-    builderTypes: string[];
-    id: string;
-  }>;
+  Footer: BuilderFooter;
 }

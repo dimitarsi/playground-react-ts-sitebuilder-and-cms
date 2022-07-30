@@ -47,31 +47,6 @@ const jsonPostHandler: RequestHandler = (req, res) => {
 app.post("/json", jsonPostHandler);
 app.use("/uploads", express.static("./uploads", {}));
 
-app.use("/plugins.js", (_, res) => {
-  const { plugins } = JSON.parse(fs.readFileSync(pluginsJsonPath).toString());
-  const filesToServe = plugins.map((p: { browserEntry: string }) =>
-    path.join(process.cwd(), "./uploads", p.browserEntry)
-  );
-
-  function pipeNext() {
-    const next = filesToServe.shift();
-    const rs = fs.createReadStream(next);
-
-    const options = {
-      end: !Boolean(filesToServe.length),
-    };
-
-    if (next && !options.end) {
-      rs.once("close", pipeNext);
-    }
-
-    if (next) {
-      rs.pipe(res, options);
-    }
-  }
-  pipeNext();
-});
-
 app.get("/authorize", (req, res) => {
   console.log(`SessionID: ${req.sessionID}`);
 

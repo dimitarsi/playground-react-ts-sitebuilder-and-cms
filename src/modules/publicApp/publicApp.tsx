@@ -52,4 +52,5 @@ export const PublicApp = (app: Application) => {
   app.get("/app", reactHandler);
 
   app.use(express.static("./dist/client"));
+  app.use(express.static("./plugins"));
 };

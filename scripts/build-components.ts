@@ -75,6 +75,8 @@ const defaultClientOptions: Partial<BuildOptions> = {
   // TODO: research spliting the bundles
   splitting: false,
   format: "iife",
+  jsxFactory: "r",
+  jsxFragment: "rf",
   banner: {
     js: `{window.Components = window.Components || [];`,
   },

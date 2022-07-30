@@ -16,8 +16,8 @@ const defaultHomePage = { name: "Home", slug: "/", order: 1, pageId: "home" };
 const defaultRootState: ComponentData = {
   id: "root",
   parent: "",
-  text: "",
-  type: "root",
+  data: "",
+  type: "root-root",
 };
 
 export const defaultHomePageState: PageState = {

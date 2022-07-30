@@ -1,7 +1,7 @@
 import React from "react";
 import data from "./HeadingsPlugin.json";
 
-export const HeadingsBuilder = () => {
+export const Component = () => {
   return <div>Builder</div>;
 };
 

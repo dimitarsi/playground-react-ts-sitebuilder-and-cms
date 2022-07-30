@@ -1,0 +1,9 @@
+.toolbar-container {
+  display: flex;
+  gap: 10px;
+}
+
+.toolbar-item {
+  border: 1px solid #333;
+  padding: 3px;
+}

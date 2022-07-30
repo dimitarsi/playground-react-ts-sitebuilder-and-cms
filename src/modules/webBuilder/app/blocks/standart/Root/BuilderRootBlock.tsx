@@ -6,14 +6,14 @@ export const BuilderRootBlock = ({
   PublicComponentChildren,
   Footer,
   data,
-  builderTypes,
+  allPublicTypes,
 }: BuilderProps<{ id: string }>) => {
   return (
     <div>
       <PublicComponent {...data}>
         <PublicComponentChildren id={data.id} />
       </PublicComponent>
-      <Footer id={data.id} builderTypes={builderTypes} />
+      <Footer id={data.id} allowedPublicTypes={allPublicTypes} />
     </div>
   );
 };

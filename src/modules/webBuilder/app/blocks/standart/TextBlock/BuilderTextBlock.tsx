@@ -90,8 +90,8 @@ export const BuilderTextBlock = ({
         }}
       >
         {contentsRef.current}
-        <Footer builderTypes={[]} id={data.id} />
       </div>
+      <Footer allowedPublicTypes={[]} id={data.id} />
     </>
   );
 };

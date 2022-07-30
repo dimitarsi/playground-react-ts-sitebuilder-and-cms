@@ -28,3 +28,7 @@ export interface ManifestData {
   shortName: string;
   version: string;
 }
+
+export interface PluginsJSONData {
+  plugins: Record<string, ManifestData>;
+}
