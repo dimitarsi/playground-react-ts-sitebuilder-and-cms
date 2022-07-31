@@ -1,5 +1,4 @@
 import React, { ReactNode, useMemo, useRef, useState } from "react";
-import { useUpdateComponent } from "../../../context/hooks/useUpdateComponent";
 import { useThrottle } from "../../../hooks/useThrottle";
 import { BuilderProps } from "../../types";
 import { Data } from "./types";
@@ -25,9 +24,9 @@ export const BuilderTextBlock = ({
   PublicComponent,
   PublicComponentChildren,
   Footer,
+  onComponentUpdate,
 }: BuilderProps<Data>) => {
   const throttle = useThrottle();
-  const onUpdateComponent = useUpdateComponent();
   const blockRef = useRef<HTMLParagraphElement | null>(null);
   const [editLabel, setEditLabel] = useState("Edit");
 
@@ -79,10 +78,7 @@ export const BuilderTextBlock = ({
         onInput={(e: React.FormEvent<HTMLDivElement>) => {
           throttle(
             () =>
-              onUpdateComponent({
-                parent: data.parent,
-                id: data.id,
-                type: data.type,
+              onComponentUpdate({
                 data: (e.target as HTMLDivElement).innerHTML || "",
               }),
             300

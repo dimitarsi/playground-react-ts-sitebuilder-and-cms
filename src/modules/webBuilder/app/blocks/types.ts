@@ -1,9 +1,4 @@
-import {
-  ComponentType,
-  PropsWithChildren,
-  PropsWithRef,
-  RefAttributes,
-} from "react";
+import { ComponentType, PropsWithChildren, RefAttributes } from "react";
 
 export type BuilderFooter = React.ComponentType<{
   allowedPublicTypes: string[];
@@ -22,4 +17,5 @@ export interface BuilderProps<D> {
     PropsWithChildren<{ id: string }>
   >;
   Footer: BuilderFooter;
+  onComponentUpdate: (data: Partial<D>) => void;
 }

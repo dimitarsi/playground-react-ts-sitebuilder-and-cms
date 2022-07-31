@@ -13,6 +13,7 @@ export const Component = ({
   PublicComponentChildren,
   Footer,
   data,
+  onComponentUpdate,
 }: {
   PublicComponent: React.ComponentType<
     React.PropsWithChildren<{ id: string; data: string }>
@@ -20,6 +21,7 @@ export const Component = ({
   PublicComponentChildren: React.ComponentType<{ id: string }>;
   Footer: React.ComponentType<{ id: string; allowedPublicTypes: string[] }>;
   data: { id: string; data: string };
+  onComponentUpdate: (params: { data: string }) => void;
 }) => {
   const [state, setComponentState] = useState(1);
   const publicProps = getPublicData(data);
@@ -28,9 +30,18 @@ export const Component = ({
       <div>
         <button onClick={() => setComponentState(state + 1)}>Click</button>
       </div>
-      <PublicComponent {...publicProps}>
-        <PublicComponentChildren id={data.id} />
-      </PublicComponent>
+      <div
+        contentEditable
+        onInput={(e: React.FormEvent<HTMLDivElement>) =>
+          onComponentUpdate({
+            data: (e.target as HTMLDivElement).innerText || "",
+          })
+        }
+      >
+        <PublicComponent {...publicProps}>
+          <PublicComponentChildren id={data.id} />
+        </PublicComponent>
+      </div>
       <Footer id={data.id} allowedPublicTypes={[]} />
     </div>
   );

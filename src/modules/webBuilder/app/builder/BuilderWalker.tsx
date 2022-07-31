@@ -4,6 +4,7 @@ import {
   usePublicTypes,
 } from "../context/ComponentsRegistry";
 import { useGetComponents } from "../context/hooks/useGetComponents";
+import { useUpdateComponent } from "../context/hooks/useUpdateComponent";
 import { BuilderToolbar } from "./BuilderToolbar";
 import "./walker.css";
 
@@ -29,6 +30,7 @@ export function BuilderWalker({
   const r = useComponentsFromRegistry(type);
   const publicTypes = usePublicTypes();
   const { current } = useGetComponents(id);
+  const updateComponent = useUpdateComponent();
 
   if (!r.BuilderComponent || !r.PublicComponent) {
     return (
@@ -47,6 +49,9 @@ export function BuilderWalker({
         PublicComponent={r.PublicComponent}
         PublicComponentChildren={BuilderChildrenWalker}
         Footer={BuilderToolbar}
+        onComponentUpdate={(data) =>
+          updateComponent({ ...current, data: data.data })
+        }
       />
     </div>
   );
