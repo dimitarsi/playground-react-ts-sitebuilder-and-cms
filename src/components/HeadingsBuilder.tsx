@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import data from "./HeadingsPlugin.json";
 
+const getPublicData = (data: { id: string; data: any }) => {
+  return {
+    ...data,
+    data: data.data || "Heading",
+  };
+};
+
 export const Component = ({
   PublicComponent,
   PublicComponentChildren,
@@ -15,13 +22,13 @@ export const Component = ({
   data: { id: string; data: string };
 }) => {
   const [state, setComponentState] = useState(1);
-
+  const publicProps = getPublicData(data);
   return (
     <div>
       <div>
         <button onClick={() => setComponentState(state + 1)}>Click</button>
       </div>
-      <PublicComponent {...data}>
+      <PublicComponent {...publicProps}>
         <PublicComponentChildren id={data.id} />
       </PublicComponent>
       <Footer id={data.id} allowedPublicTypes={[]} />

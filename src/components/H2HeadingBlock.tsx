@@ -2,10 +2,10 @@ import React, { FC, PropsWithChildren } from "react";
 import { HeadingType } from "./types";
 import { Wrapper } from "./Wrapper";
 
-export const Component: FC<PropsWithChildren> = ({ children }) => {
+export const Component: FC<{ data: string }> = ({ data }) => {
   return (
     <Wrapper>
-      <h2>{children}</h2>
+      <h2>{data}</h2>
     </Wrapper>
   );
 };
