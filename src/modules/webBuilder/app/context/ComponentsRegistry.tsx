@@ -47,6 +47,7 @@ const builderStandard: BuilderRegistry = {
 };
 
 const ComponentNotFound = () => <div>Component NOT Found</div>;
+const BuilderComponentNotFound = () => <div>Builder component NOT Found</div>;
 
 function getPublicComponents(plugins: PluginsJSONData["plugins"]): Registry {
   const publicComponentsFromPlugins = Object.keys(plugins).reduce(
@@ -90,7 +91,7 @@ function getBuilderComponents(
 
     return {
       ...acc,
-      [builderEntryKey]: component || ComponentNotFound,
+      [builderEntryKey]: component || BuilderComponentNotFound,
     };
   }, {});
 }

@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import { ComponentRegistryProvider } from "./context/ComponentsRegistry";
 import { PluginsJSONData } from "../../../plugin.types";
+import { defineModule } from "./require";
 
 // TODO: move to constants
 const PLUGINS_DIR_NAME = "plugins";
@@ -14,6 +15,9 @@ const root = ReactDOM.createRoot(
 
 window.r = React.createElement;
 window.fr = React.Fragment;
+
+// Expose react as package for iife plugins
+defineModule("react", React);
 
 fetch("/plugins.json")
   .then((res) => res.json())
