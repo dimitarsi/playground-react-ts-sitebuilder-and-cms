@@ -5,4 +5,4 @@ build
 uploads
 meta*.json
 .DS_Store
-plugins
+/plugins

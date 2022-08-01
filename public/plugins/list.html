@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>List Plugin</title>
+  </head>
+  <body>
+    <div id="root">
+      <div>Plugins</div>
+      <form
+        id="plugins"
+        action="/install"
+        enctype="multipart/form-data"
+        method="post"
+      >
+        <input type="file" name="attachment" />
+      </form>
+    </div>
+
+    <script>
+      //const template = (strings: string[], ...expr: Array<CallableFunction | string>)
+      const template = (strings, ...expr) => {
+        return (element) =>
+          strings.reduce((acc, s, i) => {
+            const exp = expr[i];
+            if (exp !== undefined) {
+              return acc + s + (typeof exp === "function" ? exp(element) : exp);
+            }
+            return acc + s;
+          }, "");
+      };
+
+      fetch("/plugins", {
+        headers: { accept: "application/json" },
+      }).then(async (res) => {
+        if (res.ok) {
+          const pluginNamesList = await res.json();
+          const pluginsContainer = document.getElementById("plugins");
+          const itemTemplate = template`
+              <div>
+                  <span>${(el) => el}</span>
+                  <label>
+                    Update
+                    <input type="submit" value="${(el) => el}" />
+                  </label>
+              </div>
+            `;
+
+          pluginNamesList.names.forEach((pName) => {
+            pluginsContainer.innerHTML += itemTemplate(pName);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

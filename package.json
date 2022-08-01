@@ -6,11 +6,9 @@
   "scripts": {
     "build": "esbuild ./src/server.ts --platform=node --outdir=./dist/server --format=cjs --sourcemap --source-root=../src --bundle --external:esbuild",
     "build:web": "esbuild ./src/client/client.tsx --outdir=./dist/client --format=iife --sourcemap --source-root=../src --bundle",
-    "build:components": "esbuild ./src/components/*.tsx --outdir=./dist/browser --format=cjs --sourcemap --source-root=./src --bundle --external:react --external:react-dom",
-    "build:all": "yarn build && yarn build:web && yarn build:components",
+    "build:components": "yarn scripts:compile ./src/components/HeadingsPlugin.json",
     "start": "node ./dist/server/server.js",
     "build:web-builder": "esbuild ./src/modules/webBuilder/app/index.tsx --outdir=./dist/web-builder --format=iife --sourcemap --source-root=../src --bundle",
-    "serve:web-builder": "esbuild ./src/modules/webBuilder/components/App.tsx --outfile=app.js --bundle --serve=5555",
     "scripts:compile": "ts-node ./scripts/build-components.ts",
     "dev": "yarn nodemon --inspect ./dist/server/server.js --ignore ./plugins --ignore ./uploads"
   },
