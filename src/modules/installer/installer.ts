@@ -6,6 +6,10 @@ import path from "path";
 export const InstallerApp = (app: Application) => {
   app.post("/install", middleware, handler);
   app.get("/install", (_, res) => {
-    res.sendFile(path.join(process.cwd(), "./public/install.html"));
+    const pathToHtml = path.join(
+      process.cwd(),
+      "./public/plugins/install.html"
+    );
+    res.sendFile(pathToHtml);
   });
 };

@@ -17,8 +17,6 @@ const maxAge = process.env.COOKIE_MAX_AGE
   ? parseFloat(process.env.COOKIE_MAX_AGE)
   : 1000 * 60 * COOKIE_MAX_AGE_MINITUES;
 
-// const pluginsJsonPath = path.join(process.cwd(), "./public/plugins.json");
-
 app.use(compression());
 
 app.use(
