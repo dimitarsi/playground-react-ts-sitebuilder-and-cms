@@ -12,11 +12,13 @@ function BuilderChildrenWalker({ id }: { id: string }) {
   const { children } = useGetComponents(id);
 
   return (
-    <div className="walker-children">
+    // <div className="walker-children">
+    <>
       {children.map((c) => (
         <BuilderWalker key={c.id} {...c} />
       ))}
-    </div>
+    </>
+    // </div>
   );
 }
 

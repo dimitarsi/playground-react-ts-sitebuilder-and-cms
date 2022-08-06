@@ -9,6 +9,8 @@ import React, {
   useState,
 } from "react";
 import { PluginsJSONData } from "../../../../plugin.types";
+import { BuilderGridBlock } from "../blocks/standart/Grid/BuilderGridBlock";
+import { GridBlock } from "../blocks/standart/Grid/GridBlock";
 import { BuilderRootBlock } from "../blocks/standart/Root/BuilderRootBlock";
 import { BuilderTextBlock } from "../blocks/standart/TextBlock/BuilderTextBlock";
 import { TextBlock } from "../blocks/standart/TextBlock/TextBlock";
@@ -40,10 +42,12 @@ const RootComponent = ({ children }: PropsWithChildren<{ data?: any }>) => (
 const publicStandard: Registry = {
   "root-root": RootComponent,
   "text-text": TextBlock,
+  "grid-grid": GridBlock,
 };
 const builderStandard: BuilderRegistry = {
   "root-builder": BuilderRootBlock,
   "text-builder": BuilderTextBlock,
+  "grid-builder": BuilderGridBlock,
 };
 
 const ComponentNotFound = () => <div>Component NOT Found</div>;
