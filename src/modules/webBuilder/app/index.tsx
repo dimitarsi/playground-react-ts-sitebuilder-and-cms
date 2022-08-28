@@ -19,16 +19,31 @@ window.fr = React.Fragment;
 // Expose react as package for iife plugins
 defineModule("react", React);
 
-fetch("/plugins.json")
-  .then((res) => res.json())
-  .then((data: PluginsJSONData) => {
+
+async function start() {
+  let data: PluginsJSONData = { plugins: {} };
+  try {
+    const response = await fetch("/plugins.json")
+    const pluginsJson = await response.json()
+
+    data = pluginsJson;
+
+  } catch (error) {
+    console.error(error)
+  } finally {
     let counter = 0;
+
     const allScripts: string[] = [];
+
     Object.values(data.plugins).forEach((plugin) => {
       Object.values(plugin.browserEntries).forEach((entry) => {
         allScripts.push(`/${plugin.shortName}/${entry}`);
       });
     });
+
+    if (!allScripts.length) {
+      render({});
+    }
 
     allScripts.forEach((entry) => {
       const script = document.createElement("script");
@@ -37,15 +52,23 @@ fetch("/plugins.json")
         counter++;
         console.log("Counter", counter, allScripts.length);
         if (counter === allScripts.length) {
-          root.render(
-            <React.StrictMode>
-              <ComponentRegistryProvider plugins={data.plugins}>
-                <App />
-              </ComponentRegistryProvider>
-            </React.StrictMode>
-          );
+          render(data.plugins);
         }
       };
       document.body.appendChild(script);
     });
-  });
+  }
+
+}
+
+function render(plugins: PluginsJSONData['plugins']) {
+  root.render(
+    <React.StrictMode>
+      <ComponentRegistryProvider plugins={plugins}>
+        <App />
+      </ComponentRegistryProvider>
+    </React.StrictMode>
+  );
+}
+
+start();
