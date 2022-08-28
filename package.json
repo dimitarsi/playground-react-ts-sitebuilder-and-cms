@@ -10,7 +10,8 @@
     "start": "node ./dist/server/server.js",
     "build:web-builder": "esbuild ./src/modules/webBuilder/app/index.tsx --outdir=./dist/web-builder --format=iife --sourcemap --source-root=../src --bundle",
     "scripts:compile": "ts-node ./scripts/build-components.ts",
-    "dev": "yarn nodemon --inspect ./dist/server/server.js --ignore ./plugins --ignore ./uploads"
+    "dev": "yarn nodemon --inspect ./dist/server/server.js --ignore ./plugins --ignore ./uploads",
+    "dev:concurrently": "concurrently \"npm run build --watch\" \"npm run build:web --watch\" \"npm run build:web-builder --watch\" \"npm run dev\""
   },
   "author": "",
   "license": "ISC",
@@ -29,6 +30,7 @@
     "@types/express-session": "^1.17.5",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "concurrently": "^7.3.0",
     "esbuild": "^0.14.48",
     "nodemon": "^2.0.19",
     "prettier": "^2.7.1",
