@@ -16,7 +16,14 @@ In VS Code run the `Debug Server` script.
 
 ⚠️ HINT: the source map dir needs to be relative to the build folder `dist` - `--sourcemap --source-root=../src`
 
-## Auto restart server on change
+
+## Start the dev environment
+
+1. Open terminal
+2. run `yarn dev:concurrently`
+3. Navigate to `localhost:3000`
+
+## Old approach - Auto restart server on change
 
 Use `nodemon` in combination of `esbuild --watch`
 
