@@ -10,8 +10,7 @@
     "start": "node ./dist/server/server.js",
     "build:web-builder": "esbuild ./src/modules/webBuilder/app/index.tsx --outdir=./dist/web-builder --format=iife --sourcemap --source-root=../src --bundle",
     "scripts:compile": "ts-node ./scripts/build-components.ts",
-    "dev": "yarn nodemon --inspect ./dist/server/server.js --ignore ./plugins --ignore ./uploads",
-    "dev:experimental": "yarn nodemon --inspect ./dist/server/server.js --ignore ./plugins --ignore ./uploads"
+    "dev": "yarn nodemon --inspect ./dist/server/server.js --ignore ./plugins --ignore ./uploads"
   },
   "author": "",
   "license": "ISC",
